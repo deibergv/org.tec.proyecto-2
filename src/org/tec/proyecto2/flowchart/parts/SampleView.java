@@ -3,6 +3,7 @@ package org.tec.proyecto2.flowchart.parts;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
+
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.services.IServiceConstants;
@@ -11,8 +12,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.jdt.debug.core.JDIDebugModel;
-import org.eclipse.jdt.core.dom.*;
 
 public class SampleView {
 	private Label myLabelInView;
