@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: FlowChart
-Bundle-SymbolicName: org.tec.datos.proyecto1.flowChart;singleton:=true
+Bundle-SymbolicName: org.tec.proyecto-2;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.tec.datos.proyecto1.flowchart.Activator
 Require-Bundle: javax.inject,
