@@ -1,4 +1,4 @@
-package org.tec.datos.proyecto1.flowchart;
+package org.tec.proyecto2.flowchart;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;

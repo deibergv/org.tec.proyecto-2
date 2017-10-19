@@ -1,4 +1,4 @@
-package org.tec.datos.proyecto1.flowchart.parts;
+package org.tec.proyecto2.flowchart.parts;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
