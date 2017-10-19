@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: FlowChart
-Bundle-SymbolicName: org.tec.proyecto-2;singleton:=true
+Bundle-SymbolicName: org.tec.proyecto2;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.tec.proyecto2.flowchart.Activator
 Require-Bundle: javax.inject,
@@ -21,4 +21,5 @@ Require-Bundle: javax.inject,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: javax.annotation;version="1.2.0"
 Bundle-ActivationPolicy: lazy
-Bundle-Vendor: Vendedor
+Export-Package: org.tec.proyecto2.flowchart,
+ org.tec.proyecto2.flowchart.parts

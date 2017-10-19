@@ -3,11 +3,11 @@
 <plugin>
 
    <extension
-         id="org.tec.proyecto2.flowchart.fragment"
+         id="org.tec.proyecto2.fragment1"
          point="org.eclipse.e4.workbench.model">
       <fragment
             apply="notexists"
-            uri="fragment.e4xmi">
+            uri="fragment1.e4xmi">
       </fragment>
    </extension>
    <extension
