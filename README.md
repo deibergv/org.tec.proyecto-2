@@ -1,2 +1,2 @@
 # org.tec.proyecto-2
-Controlador de verciones de Proyecto 2
+Controlador de versiones de Proyecto 2
