@@ -16,10 +16,19 @@
             name="Step In"
             id="stepIn.commands.category">
       </category>
+      <category
+      		name="Step Over"
+      		id="stepOver.commandas.category">
+      </category>
       <command
             name="Step In"
             categoryId="stepIn.commands.category"
             id="stepIn.commands.sampleCommand">
+      </command>
+      <command
+      		name="Step Over"
+      		categoryId="stepOver.commands.category"
+      		id="stepOver.commands.sampleCommand">
       </command>
    </extension>
    <extension
@@ -28,15 +37,10 @@
             commandId="stepIn.commands.sampleCommand"
             class="org.tec.proyecto2.flowchart.handlers.StepInHandler">
       </handler>
-   </extension>
-   <extension
-         point="org.eclipse.ui.bindings">
-      <key
-            commandId="stepIn.commands.sampleCommand"
-            contextId="org.eclipse.ui.contexts.window"
-            sequence="M1+6"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
-      </key>
+      <handler
+      		commandId="stepOver.commands.sampleCommand"
+      		class="org.tec.proyecto2.flowchart.handlers.StepOverHandler">
+      </handler>
    </extension>
    <extension
     	 point="org.eclipse.ui.menus">
@@ -49,6 +53,18 @@
 	                  icon="icons/stepIn.png"
 	                  tooltip="Step In"
 	                  id="stepIn.toolbars.sampleCommand">
+	            </command>
+	         </toolbar>
+	      </menuContribution>
+	      <menuContribution
+	            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+	         <toolbar
+	               id="stepOver.toolbars.sampleToolbar">
+	            <command
+	                  commandId="stepOver.commands.sampleCommand"
+	                  icon="icons/stepOver.png"
+	                  tooltip="Step Over"
+	                  id="stepOver.toolbars.sampleCommand">
 	            </command>
 	         </toolbar>
 	      </menuContribution>
