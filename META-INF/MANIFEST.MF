@@ -17,9 +17,10 @@ Require-Bundle: javax.inject,
  org.eclipse.jdt.core;bundle-version="3.13.50",
  org.eclipse.core.variables;bundle-version="3.4.0",
  org.eclipse.core.resources;bundle-version="3.12.0",
- org.eclipse.jdt.ui;bundle-version="3.13.50"
+ org.eclipse.jdt.ui;bundle-version="3.13.50",
+ org.eclipse.ui;bundle-version="3.109.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: javax.annotation;version="1.2.0"
 Bundle-ActivationPolicy: lazy
-Export-Package: org.tec.proyecto2.flowchart,
- org.tec.proyecto2.flowchart.parts
+Export-Package: org.tec.proyecto2.flowchart;uses:="org.osgi.framework",
+ org.tec.proyecto2.flowchart.parts;uses:="org.eclipse.swt.widgets,org.eclipse.jface.viewers"

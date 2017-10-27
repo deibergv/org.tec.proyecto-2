@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="ASCII"?>
 <fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/descriptor/basic" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmi:id="_BxaXACerEeWxCPrV0pAZQQ">
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_EI7oACerEeWxCPrV0pAZQQ" featurename="descriptors" parentElementId="xpath:/">
-    <elements xsi:type="basic:PartDescriptor" xmi:id="_KMklcCerEeWxCPrV0pAZQQ" elementId="test.partDescFragment.ASampleE4View" label="Flow Chart View" tooltip="" category="Flow Chart Generator" iconURI="platform:/plugin/org.tec.proyecto2/icons/control-flow-graph-factory-16x16.png" contributionURI="bundleclass://org.tec.proyecto2/org.tec.proyecto2.flowchart.parts.SampleView">
+    <elements xsi:type="basic:PartDescriptor" xmi:id="_KMklcCerEeWxCPrV0pAZQQ" elementId="test.partDescFragment.ASampleE4View" label="Flow Chart View" iconURI="platform:/plugin/org.tec.proyecto2/icons/control-flow-graph-factory-16x16.png" tooltip="" category="Flow Chart Generator" contributionURI="bundleclass://org.tec.proyecto2/org.tec.proyecto2.flowchart.parts.SampleView">
       <tags>View</tags>
       <tags>categoryTag:FlowChart</tags>
+      <handlers xmi:id="_4nFGULqUEee3I6gLgNxW6A" elementId="org.tec.proyecto2.handler.0" contributionURI="bundleclass://org.tec.proyecto2/org.tec.proyecto2.flowchart.handlers.StepInHandler"/>
     </elements>
   </fragments>
 </fragment:ModelFragments>
