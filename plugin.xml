@@ -54,12 +54,6 @@
 	                  tooltip="Step In"
 	                  id="stepIn.toolbars.sampleCommand">
 	            </command>
-	         </toolbar>
-	      </menuContribution>
-	      <menuContribution
-	            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
-	         <toolbar
-	               id="stepOver.toolbars.sampleToolbar">
 	            <command
 	                  commandId="stepOver.commands.sampleCommand"
 	                  icon="icons/stepOver.png"
