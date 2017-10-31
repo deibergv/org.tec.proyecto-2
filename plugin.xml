@@ -20,6 +20,10 @@
       		name="Step Over"
       		id="stepOver.commandas.category">
       </category>
+      <category
+      		name="Debug"
+      		id="debug.commands.category">
+      </category>
       <command
             name="Step In"
             categoryId="stepIn.commands.category"
@@ -30,6 +34,11 @@
       		categoryId="stepOver.commands.category"
       		id="stepOver.commands.sampleCommand">
       </command>
+      <command
+      		name="Debug"
+      		categoryId="debug.commands.category"
+      		id="debug.commands.sampleCommand">
+      </command> 
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -41,6 +50,10 @@
       		commandId="stepOver.commands.sampleCommand"
       		class="org.tec.proyecto2.flowchart.handlers.StepOverHandler">
       </handler>
+      <handler
+      		commandId="debug.commands.sampleCommand"
+      		class="org.tec.proyecto2.flowchart.handlers.DebugHandler">
+      </handler>
    </extension>
    <extension
     	 point="org.eclipse.ui.menus">
@@ -48,6 +61,12 @@
 	            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
 	         <toolbar
 	               id="stepIn.toolbars.sampleToolbar">
+	            <command
+	                  commandId="debug.commands.sampleCommand"
+	                  icon="icons/debug.png"
+	                  tooltip="Generate flow chart"
+	                  id="debug.toolbars.sampleCommand">
+	            </command>
 	            <command
 	                  commandId="stepIn.commands.sampleCommand"
 	                  icon="icons/stepIn.png"
