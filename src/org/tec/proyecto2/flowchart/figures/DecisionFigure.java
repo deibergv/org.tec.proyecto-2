@@ -9,7 +9,7 @@ public class DecisionFigure extends ActivityFigure {
 	public FixedAnchor noAnchor;
 
 	public DecisionFigure() {
-		setForegroundColor(ColorConstants.red);		//Asignacion de Color
+		setForegroundColor(ColorConstants.white);		//Asignacion de Color
 		inAnchor = new FixedAnchor(this);
 		inAnchor.place = new Point(1, 0);
 		targetAnchors.put("in_dec", inAnchor);
