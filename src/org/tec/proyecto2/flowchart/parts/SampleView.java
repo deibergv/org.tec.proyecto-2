@@ -1,188 +1,150 @@
 package org.tec.proyecto2.flowchart.parts;
 
 import javax.annotation.PostConstruct;
-import org.eclipse.e4.ui.di.Focus;
-//import org.eclipse.jface.viewers.LabelProvider;
-//import org.eclipse.jface.viewers.Viewer;
+
+import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.LightweightSystem;
+import org.eclipse.draw2d.MouseEvent;
+import org.eclipse.draw2d.MouseListener;
+import org.eclipse.draw2d.MouseMotionListener;
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.SWT;
-//import org.eclipse.swt.events.MouseWheelListener;
-//import org.eclipse.swt.graphics.Image;
-//import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Composite;
-//import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
-//import org.eclipse.swt.widgets.Shell;
-//import org.eclipse.ui.IActionBars;
-//import org.eclipse.ui.part.ViewPart;
-//import org.eclipse.zest.core.viewers.AbstractZoomableViewer;
-//import org.eclipse.zest.core.viewers.GraphViewer;
-//import org.eclipse.zest.core.viewers.IGraphContentProvider;
-//import org.eclipse.zest.core.viewers.IZoomableWorkbenchPart;
-//import org.eclipse.zest.core.viewers.ZoomContributionViewItem;
-//import org.eclipse.zest.layouts.LayoutAlgorithm;
-//import org.eclipse.zest.layouts.LayoutStyles;
-//import org.eclipse.zest.layouts.algorithms.SpringLayoutAlgorithm;
-//import org.eclipse.zest.layouts.algorithms.TreeLayoutAlgorithm;
-//import org.tec.proyecto2.flowchart.model.NodeModelContentProvider;
-//import org.tec.proyecto2.flowchart.viewer.FlowLabelProvider;
-//import org.tec.proyecto2.flowchart.viewer.NodeContentProvider;
-
-//import de.vogella.zest.jface.model.NodeModelContentProvider;
-//import de.vogella.zest.jface.zestviewer.ZestLabelProvider;
-//import de.vogella.zest.jface.zestviewer.ZestNodeContentProvider;
-
+import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.widgets.*;
+import org.tec.proyecto2.flowchart.figures.*;
 
 public class SampleView {
-	private Label myLabelInView;
-	
 
 	@PostConstruct
 	public void createPartControl(Composite parent) {
-		System.out.println("Enter in SampleE4View postConstruct");
 
-		myLabelInView = new Label(parent, SWT.BORDER);
-		myLabelInView.setText("This is a sample E4 view");
+		 ScrolledComposite ScrollComposite = new ScrolledComposite(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		 ScrollComposite.setExpandHorizontal(true);
+		 ScrollComposite.setExpandVertical(true);
+		 ScrollComposite.setMinWidth(500);
+		 ScrollComposite.setMinHeight(10000);
+		
+		Canvas canvas = new Canvas(ScrollComposite, SWT.NONE);
+		LightweightSystem lws = new LightweightSystem(canvas);
+		ChartFigure flowchart = new ChartFigure();
+		lws.setContents(flowchart);
+
+		ScrollComposite.setContent(canvas);
+		
+		
+		// fillToolBar();
+		// createToolbar(parent);
+
+		TerminatorFigure start = new TerminatorFigure();
+		start.setName("Start");
+		start.setBounds(new Rectangle(40, 20, 80, 20));
+		DecisionFigure dec = new DecisionFigure();
+		dec.setName("Should I?");
+		dec.setBounds(new Rectangle(30, 80, 100, 60));
+		ProcessFigure proc = new ProcessFigure();
+		proc.setName("Do it!");
+		proc.setBounds(new Rectangle(40, 160, 80, 40));
+		TerminatorFigure stop = new TerminatorFigure();
+		stop.setName("End");
+		stop.setBounds(new Rectangle(40, 300, 80, 20));
+
+		PathFigure path1 = new PathFigure();
+		path1.setSourceAnchor(start.outAnchor);
+		path1.setTargetAnchor(dec.inAnchor);
+		PathFigure path2 = new PathFigure();
+		path2.setSourceAnchor(dec.yesAnchor);
+		path2.setTargetAnchor(proc.inAnchor);
+		PathFigure path3 = new PathFigure();
+		path3.setSourceAnchor(dec.noAnchor);
+		path3.setTargetAnchor(stop.inAnchor);
+		PathFigure path4 = new PathFigure();
+		path4.setSourceAnchor(proc.outAnchor);
+		path4.setTargetAnchor(stop.inAnchor);
+
+		flowchart.add(start);
+		flowchart.add(dec);
+		flowchart.add(proc);
+		flowchart.add(stop);
+		flowchart.add(path1);
+		flowchart.add(path2);
+		flowchart.add(path3);
+		flowchart.add(path4);
+
+		new Dnd(start);
+		new Dnd(proc);
+		new Dnd(dec); // PERMITE MOVIMIENTO
+		new Dnd(stop);
 
 	}
 
-	@Focus
-	public void setFocus() {
-		myLabelInView.setFocus();
+	// private void fillToolBar() {
+	// ZoomContributionViewItem toolbarZoomContributionViewItem = new
+	// ZoomContributionViewItem(this);
+	// IActionBars bars = getViewSite().getActionBars();
+	// bars.getMenuManager().add(toolbarZoomContributionViewItem);
+	// }
+	//
+	// @Override
+	// public AbstractZoomableViewer getZoomableViewer() {
+	// return viewer;
+	// }
 
+	class Dnd extends MouseMotionListener.Stub implements MouseListener {
+		// PERMITE MOVIMIENTO y otras cosas
+		public Dnd(IFigure figure) {
+			figure.addMouseMotionListener(this);
+			figure.addMouseListener(this);
+		}
+
+		Point start;
+
+		public void mouseReleased(MouseEvent e) {
+		}
+
+		public void mouseClicked(MouseEvent e) {
+		}
+
+		public void mouseDoubleClicked(MouseEvent e) {
+		}
+
+		public void mousePressed(MouseEvent e) {
+			start = e.getLocation();
+		}
+
+		public void mouseDragged(MouseEvent e) {
+			Point p = e.getLocation();
+			Dimension d = p.getDifference(start);
+			start = p;
+			Figure f = ((Figure) e.getSource());
+			f.setBounds(f.getBounds().getTranslated(d.width, d.height));
+		}
 	}
 
+	public void createToolbar(Composite parent) {
+		ToolBar toolBar = new ToolBar(parent, SWT.BORDER | SWT.FLAT);
+
+		ToolItem item = new ToolItem(toolBar, SWT.PUSH);
+		item.setText("TEST");
+		item = new ToolItem(toolBar, SWT.PUSH);
+		item.setText("Boton prueba");
+		// new ToolItem(toolBar, SWT.SEPARATOR);
+		// item = new ToolItem(toolBar, SWT.CHECK);
+		// item.setText("Check One");
+		// item = new ToolItem(toolBar, SWT.CHECK);
+		// item.setText("Check Two");
+		// new ToolItem(toolBar, SWT.SEPARATOR);
+		// item = new ToolItem(toolBar, SWT.RADIO);
+		// item.setText("Radio One");
+		// item = new ToolItem(toolBar, SWT.RADIO);
+		// item.setText("Radio Two");
+		// new ToolItem(toolBar, SWT.SEPARATOR);
+		// item = new ToolItem(toolBar, SWT.DROP_DOWN);
+		// item.setText("Dropdown One");
+		// item = new ToolItem(toolBar, SWT.DROP_DOWN);
+		// item.setText("Dropdown Two");
+	}
 }
 
-
-//public class SampleView extends ViewPart implements IZoomableWorkbenchPart {
-//	static GraphViewer viewer = null;
-//	static class MyContentProvider implements IGraphContentProvider {
-//
-//		public Object getSource(Object rel) {
-//			if ("Rock2Paper".equals(rel)) {
-//				return "Rock";
-//			} else if ("Paper2Scissors".equals(rel)) {
-//				return "Paper";
-//			} else if ("Scissors2Rock".equals(rel)) {
-//				return "Scissors";
-//			}
-//			return null;
-//		}
-//
-//		public Object[] getElements(Object input) {
-//			return new Object[] { "Rock2Paper", "Paper2Scissors", "Scissors2Rock" };
-//		}
-//
-//		public Object getDestination(Object rel) {
-//			if ("Rock2Paper".equals(rel)) {
-//				return "Paper";
-//			} else if ("Paper2Scissors".equals(rel)) {
-//				return "Scissors";
-//			} else if ("Scissors2Rock".equals(rel)) {
-//				return "Rock";
-//			}
-//			return null;
-//		}
-//
-////		public double getWeight(Object connection) {
-////			return 0;
-////		}
-////
-////		public void dispose() {
-////		}
-////
-////		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-////		}
-//
-//	}
-//
-//	static class MyLabelProvider extends LabelProvider {
-//		
-//		
-////		final Image image = Display.getDefault().getSystemImage(SWT.ICON_WARNING);
-//		final Image image = new Image(null,"C:/Users/Deiber/Desktop/iconos/return16.png");	
-////    	final Image image = new Image(null, getClass().getResourceAsStream("icons/eclipse128.png"));
-////    	final Image image = new ImageIcon("eclipse128.png").getImage();
-////    	Image image = new ImageIcon(getClass().getResource("eclipse128.png")).getImage(); //
-////		Image image = new Image(display,"C:/devEclipse_02/eclipse/plugins/org.eclipse.platform_2.0.2/eclipse_lg.gif"); 
-//    	
-//		public Image getImage(Object element) {
-//
-//			if (element.equals("Rock")){
-//				final Image image = new Image(null,"C:/Users/Deiber/Desktop/Iconos/return24.png");
-//				return image;
-//			}
-//			else if (element.equals("Rock") || element.equals("Paper") || element.equals("Scissors")) {
-//				return image;
-//			}
-//			return null;
-//		}
-//
-////		public String getText(Object element) {
-////			return element.toString();
-////		}
-//
-//	}
-//
-////	public static void test() {
-////		Display d = new Display();
-////		Shell shell = new Shell(d);
-////		shell.setText("GraphJFaceSnippet2");
-////		shell.setLayout(new FillLayout(SWT.VERTICAL));
-////		shell.setSize(400, 400);
-////		viewer = new GraphViewer(shell, SWT.NONE);
-////		viewer.setContentProvider(new MyContentProvider());
-////		viewer.setLabelProvider(new MyLabelProvider());
-////		viewer.setLayoutAlgorithm(new SpringLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING));
-////		// viewer.setLayoutAlgorithm(new
-////		// TreeLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING));
-////		viewer.setInput(new Object());
-////		shell.open();
-////		while (!shell.isDisposed()) {
-////			while (!d.readAndDispatch()) {
-////				d.sleep();
-////			}
-////		}
-////	}
-////	}
-//	@PostConstruct
-//	public void createPartControl(Composite parent) {
-//		viewer = new GraphViewer(parent, SWT.NONE);
-////		viewer.setContentProvider(new MyContentProvider());
-////		viewer.setLabelProvider(new MyLabelProvider());
-////		viewer.setInput(new Object());
-//		  viewer.setContentProvider(new NodeContentProvider());
-//        viewer.setLabelProvider(new FlowLabelProvider());
-//        NodeModelContentProvider model = new NodeModelContentProvider();
-//        viewer.setInput(model.getNodes());
-//		LayoutAlgorithm layout = setLayout();
-//        viewer.setLayoutAlgorithm(layout, true);
-//        viewer.applyLayout();
-//		fillToolBar();
-//		
-//	}
-//
-//	private LayoutAlgorithm setLayout() {
-//        LayoutAlgorithm layout;
-////         layout = new SpringLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING);
-//        layout = new TreeLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING);
-//        return layout;
-//	}
-//	
-//	
-//@Override
-//public void setFocus() {
-//}
-//
-//private void fillToolBar() {
-//    ZoomContributionViewItem toolbarZoomContributionViewItem = new ZoomContributionViewItem(this);
-//    IActionBars bars = getViewSite().getActionBars();
-//    bars.getMenuManager().add(toolbarZoomContributionViewItem);
-//}
-//
-//@Override
-//public AbstractZoomableViewer getZoomableViewer() {
-//    return viewer;
-//}
-//
-//}
