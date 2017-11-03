@@ -1,16 +1,17 @@
 package org.tec.proyecto2.flowchart.handlers;
 
-import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import static org.tec.proyecto2.flowchart.Activator.input;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
@@ -19,6 +20,14 @@ import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.Statement;
+import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.Block;
+import org.eclipse.jdt.debug.core.JDIDebugModel;
+import org.eclipse.jdt.internal.debug.core.model.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DebugHandler extends AbstractHandler {
 
@@ -44,19 +53,16 @@ public class DebugHandler extends AbstractHandler {
     }
 
     private void analyseMethods(IProject project) throws JavaModelException {
-        IPackageFragment[] packages = JavaCore.create(project)
-                .getPackageFragments();
+        IPackageFragment[] packages = JavaCore.create(project).getPackageFragments();
         // parse(JavaCore.create(project));
         for (IPackageFragment mypackage : packages) {
             if (mypackage.getKind() == IPackageFragmentRoot.K_SOURCE) {
                 createAST(mypackage);
             }
-
         }
     }
 
-    private void createAST(IPackageFragment mypackage)
-            throws JavaModelException {
+    private void createAST (IPackageFragment mypackage) throws JavaModelException {
         for (ICompilationUnit unit : mypackage.getCompilationUnits()) {
             // now create the AST for the ICompilationUnits
             CompilationUnit parse = parse(unit);
@@ -64,16 +70,31 @@ public class DebugHandler extends AbstractHandler {
             parse.accept(visitor);
             
             for (MethodDeclaration method : visitor.getMethods()) {
-            	List<?> names = method.getBody().statements();
-            	for (Object statement : names) {           		
-            		if (statement.toString().contains("if")) {
-            			System.out.println("if");
-            		} else if( statement.toString().contains("for")) {
-            			System.out.println("for");
-            		} else {
-            			System.out.println("");
-            		}
+            	Block names = method.getBody();
+                Statement parser = parser(names);
+                parser.accept(new ASTVisitor() { 
+        			public boolean visit(SimpleName node) {
+        				node.getNodeType();
+        				System.out.println("Name: " + node.getFullyQualifiedName());
+        				return true;
+        				}
+        			});
+        			
+                
+            for (Object statement : names.statements()) {           		
+            	if (statement.toString().contains("if") && statement.toString().contains("else")) {
+            		input.add("if");
+            	} else if( statement.toString().contains("for") && statement.toString().contains("(") ) {
+            		input.add("for");
+            	} else if( statement.toString().contains("while") && statement.toString().contains("(")) {
+            		input.add("while");
+            	} else {
+            		input.add("sta");
             	}
+            }
+            	
+            System.out.println(input);
+            input = null;
             }
 
         }
@@ -89,11 +110,20 @@ public class DebugHandler extends AbstractHandler {
 
     @SuppressWarnings("deprecation")
 	private static CompilationUnit parse(ICompilationUnit unit) {
-        ASTParser parser = ASTParser.newParser(AST.JLS3);
+        ASTParser parser = ASTParser.newParser(AST.JLS8);
         parser.setKind(ASTParser.K_COMPILATION_UNIT);
         parser.setSource(unit);
         parser.setResolveBindings(true);
         return (CompilationUnit) parser.createAST(null); // parse
     }
-}
+    
+    private static Block parser(Block list) {
+    	@SuppressWarnings("deprecation")
+		ASTParser parser = ASTParser.newParser(AST.JLS8);
+    	parser.setKind(ASTParser.K_STATEMENTS);
+    	parser.setSource(list.toString().toCharArray());
+    	parser.setResolveBindings(true);
+    	return (Block) parser.createAST(null);
+    }
 
+}

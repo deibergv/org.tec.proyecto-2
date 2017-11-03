@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
- 
    <extension
          id="org.tec.proyecto2.fragment1"
          point="org.eclipse.e4.workbench.model">
@@ -24,10 +23,6 @@
           name="Debug"
           id="debug.commands.category">
       </category>
-      <category
-      		name="Debug"
-      		id="debug.commands.category">
-      </category>
       <command
             name="Step In"
             categoryId="stepIn.commands.category"
@@ -39,15 +34,9 @@
           id="stepOver.commands.sampleCommand">
       </command>
       <command
-<<<<<<< HEAD
       		name="Debug"
       		categoryId="debug.commands.category"
       		id="debug.commands.sampleCommand">
-=======
-          name="Debug"
-          categoryId="debug.commands.category"
-          id="debug.commands.sampleCommand">
->>>>>>> master
       </command> 
    </extension>
    <extension
@@ -64,13 +53,8 @@
           commandId="debug.commands.sampleCommand"
           class="org.tec.proyecto2.flowchart.handlers.DebugHandler">
       </handler>
-      <handler
-      		commandId="debug.commands.sampleCommand"
-      		class="org.tec.proyecto2.flowchart.handlers.DebugHandler">
-      </handler>
    </extension>
    <extension
-<<<<<<< HEAD
     	 point="org.eclipse.ui.menus">
 	      <menuContribution
 	            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
@@ -96,33 +80,6 @@
 	            </command>
 	         </toolbar>
 	      </menuContribution>
-=======
-       point="org.eclipse.ui.menus">
-        <menuContribution
-        locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
-           <toolbar
-                 id="stepIn.toolbars.sampleToolbar">
-              <command
-                    commandId="debug.commands.sampleCommand"
-                    icon="icons/debug.png"
-                    tooltip="Generate flow chart"
-                    id="debug.toolbars.sampleCommand">
-              </command>
-              <command
-                    commandId="stepIn.commands.sampleCommand"
-                    icon="icons/stepIn.png"
-                    tooltip="Step In"
-                    id="stepIn.toolbars.sampleCommand">
-              </command>
-              <command
-                    commandId="stepOver.commands.sampleCommand"
-                    icon="icons/stepOver.png"
-                    tooltip="Step Over"
-                    id="stepOver.toolbars.sampleCommand">
-              </command>
-           </toolbar>
-        </menuContribution>
->>>>>>> master
    </extension>
 </plugin>
  

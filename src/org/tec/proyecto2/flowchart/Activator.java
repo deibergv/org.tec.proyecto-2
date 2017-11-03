@@ -1,11 +1,14 @@
 package org.tec.proyecto2.flowchart;
 
+import java.util.ArrayList;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
 public class Activator implements BundleActivator {
 
 	private static BundleContext context;
+	public static ArrayList<String> input;
 
 	static BundleContext getContext() {
 		return context;
