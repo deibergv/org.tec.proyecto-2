@@ -3,14 +3,12 @@ package org.tec.proyecto2.flowchart.handlers;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import static org.tec.proyecto2.flowchart.Activator.input;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
@@ -31,7 +29,8 @@ import java.util.List;
 public class DebugHandler extends AbstractHandler {
 
     private static final String JDT_NATURE = "org.eclipse.jdt.core.javanature";
-
+    public static ArrayList<String> input = new ArrayList<>();
+    
     @Override
     public Object execute(ExecutionEvent event) throws ExecutionException {
         IWorkspace workspace = ResourcesPlugin.getWorkspace();
@@ -70,31 +69,28 @@ public class DebugHandler extends AbstractHandler {
             
             for (MethodDeclaration method : visitor.getMethods()) {
             	Block names = method.getBody();
-                Statement parser = parser(names);
-                parser.accept(new ASTVisitor() { 
-        			public boolean visit(SimpleName node) {
-        				node.getNodeType();
-        				System.out.println("Name: " + node.getFullyQualifiedName());
-        				return true;
-        				}
-        			});
-        			
-                
-            for (Object statement : names.statements()) {           		
-            	if (statement.toString().contains("if") && statement.toString().contains("else")) {
-            		input.add("if");
-            	} else if( statement.toString().contains("for") && statement.toString().contains("(") ) {
-            		input.add("for");
-            	} else if( statement.toString().contains("while") && statement.toString().contains("(")) {
-            		input.add("while");
-            	} else {
-            		input.add("sta");
-            	}
+//                Statement parser = parser(names);
+//                parser.accept(new ASTVisitor() { 
+//        			public boolean visit(Statement node) {
+//        				System.out.println("Type: " + node.getNodeType());
+//        				return true;
+//        				}
+//        			});
+        		
+            	for (Object statement : names.statements()) {           		
+            		if (statement.toString().contains("if") && statement.toString().contains("else")) {
+            			input.add("if");
+            		} else if( statement.toString().contains("for") && statement.toString().contains("(") ) {
+            			input.add("for");
+            		} else if( statement.toString().contains("while") && statement.toString().contains("(")) {
+            			input.add("while");
+            		} else {
+            			input.add("sta");
+            		}
+            	} 	            	
             }
-            	
             System.out.println(input);
-            input = null;
-            }
+            input.clear();
 
         }
     }
@@ -109,21 +105,21 @@ public class DebugHandler extends AbstractHandler {
 
     @SuppressWarnings("deprecation")
 	private static CompilationUnit parse(ICompilationUnit unit) {
-        ASTParser parser = ASTParser.newParser(AST.JLS8);
+        ASTParser parser = ASTParser.newParser(AST.JLS4);
         parser.setKind(ASTParser.K_COMPILATION_UNIT);
         parser.setSource(unit);
         parser.setResolveBindings(true);
         return (CompilationUnit) parser.createAST(null); // parse
     }
     
-    private static Block parser(Block list) {
-    	@SuppressWarnings("deprecation")
-		ASTParser parser = ASTParser.newParser(AST.JLS8);
-    	parser.setKind(ASTParser.K_STATEMENTS);
-    	parser.setSource(list.toString().toCharArray());
-    	parser.setResolveBindings(true);
-    	return (Block) parser.createAST(null);
-    }
+//    private static Block parser(Block list) {
+//    	@SuppressWarnings("deprecation")
+//		ASTParser parser = ASTParser.newParser(AST.JLS8);
+//    	parser.setKind(ASTParser.K_STATEMENTS);
+//    	parser.setSource(list.toString().toCharArray());
+//    	parser.setResolveBindings(true);
+//    	return (Block) parser.createAST(null);
+//    }
 
 }
 

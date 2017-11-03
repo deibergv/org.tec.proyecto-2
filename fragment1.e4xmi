@@ -4,7 +4,6 @@
     <elements xsi:type="basic:PartDescriptor" xmi:id="_KMklcCerEeWxCPrV0pAZQQ" elementId="test.partDescFragment.ASampleE4View" label="Flow Chart View" iconURI="platform:/plugin/org.tec.proyecto2/icons/control-flow-graph-factory-16x16.png" tooltip="" category="Flow Chart Generator" contributionURI="bundleclass://org.tec.proyecto2/org.tec.proyecto2.flowchart.parts.SampleView">
       <tags>View</tags>
       <tags>categoryTag:FlowChart</tags>
-      <handlers xmi:id="_4nFGULqUEee3I6gLgNxW6A" elementId="org.tec.proyecto2.handler.0" contributionURI="bundleclass://org.tec.proyecto2/org.tec.proyecto2.flowchart.handlers.StepInHandler"/>
     </elements>
   </fragments>
 </fragment:ModelFragments>

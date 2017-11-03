@@ -27,7 +27,7 @@
             name="Step In"
             categoryId="stepIn.commands.category"
             id="stepIn.commands.sampleCommand">
-             </command>
+      </command>
       <command
           name="Step Over"
           categoryId="stepOver.commands.category"
