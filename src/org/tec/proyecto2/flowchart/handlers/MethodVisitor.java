@@ -13,6 +13,7 @@ public class MethodVisitor extends ASTVisitor {
         methods.add(node);
         return super.visit(node);
     }
+    
 
     public List<MethodDeclaration> getMethods() {
         return methods;

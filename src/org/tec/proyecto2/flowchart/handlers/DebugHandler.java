@@ -14,10 +14,14 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.IfStatement;
+import org.eclipse.jdt.core.dom.ForStatement;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.ChildListPropertyDescriptor;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Block;
@@ -29,7 +33,7 @@ import java.util.List;
 public class DebugHandler extends AbstractHandler {
 
     private static final String JDT_NATURE = "org.eclipse.jdt.core.javanature";
-    public static ArrayList<String> input = new ArrayList<>();
+    private static ArrayList<ArrayList<String>> input = new ArrayList<>();
     
     @Override
     public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -64,30 +68,38 @@ public class DebugHandler extends AbstractHandler {
         for (ICompilationUnit unit : mypackage.getCompilationUnits()) {
             // now create the AST for the ICompilationUnits
             CompilationUnit parse = parse(unit);
+//            CompilationUnit parseStatement = parseStatement(unit);
             MethodVisitor visitor = new MethodVisitor();
             parse.accept(visitor);
             
+//            parseStatement.accept(new ASTVisitor() { 
+//    			public boolean visit (Statement node) {
+//    				System.out.println("Type: " + node.getNodeType());
+//    				return true;
+//    				}
+//    			});
+            
             for (MethodDeclaration method : visitor.getMethods()) {
-            	Block names = method.getBody();
-//                Statement parser = parser(names);
-//                parser.accept(new ASTVisitor() { 
-//        			public boolean visit(Statement node) {
-//        				System.out.println("Type: " + node.getNodeType());
-//        				return true;
-//        				}
-//        			});
-        		
-            	for (Object statement : names.statements()) {           		
-            		if (statement.toString().contains("if") && statement.toString().contains("else")) {
-            			input.add("if");
-            		} else if( statement.toString().contains("for") && statement.toString().contains("(") ) {
-            			input.add("for");
-            		} else if( statement.toString().contains("while") && statement.toString().contains("(")) {
-            			input.add("while");
+            	List<Statement> names = method.getBody().statements();
+        		ArrayList<String> temp = new ArrayList<>();
+            	
+            	for (Statement statement : names) {            		
+            		if (statement.getNodeType() == 24) {
+            			temp.add("for");
+            		} else if (statement.getNodeType() == 25) {
+//            			IfStatement state = statement; 
+            			temp.add("if");
+            		} else if( statement.getNodeType() == 61) {
+            			temp.add("while");
+            		} else if( statement.getNodeType() == 21){
+            			temp.add("exp");
+            		} else if( statement.getNodeType() == 60){
+            			temp.add("var");
             		} else {
-            			input.add("sta");
+            			temp.add(statement.toString());
             		}
-            	} 	            	
+            	}
+            	input.add(temp);
             }
             System.out.println(input);
             input.clear();
@@ -112,13 +124,13 @@ public class DebugHandler extends AbstractHandler {
         return (CompilationUnit) parser.createAST(null); // parse
     }
     
-//    private static Block parser(Block list) {
-//    	@SuppressWarnings("deprecation")
-//		ASTParser parser = ASTParser.newParser(AST.JLS8);
+//    @SuppressWarnings("deprecation")
+//	private static CompilationUnit parseStatement(ICompilationUnit unit) {
+//		ASTParser parser = ASTParser.newParser(AST.JLS4);
 //    	parser.setKind(ASTParser.K_STATEMENTS);
-//    	parser.setSource(list.toString().toCharArray());
+//    	parser.setSource(unit);
 //    	parser.setResolveBindings(true);
-//    	return (Block) parser.createAST(null);
+//    	return (CompilationUnit) parser.createAST(null);
 //    }
 
 }
