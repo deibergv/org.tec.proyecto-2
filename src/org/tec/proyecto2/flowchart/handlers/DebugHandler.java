@@ -87,7 +87,10 @@ public class DebugHandler extends AbstractHandler {
             		if (statement.getNodeType() == 24) {
             			temp.add("for");
             		} else if (statement.getNodeType() == 25) {
-//            			IfStatement state = statement; 
+            			IfStatement state = (IfStatement)statement;
+            			System.out.println(state.getExpression());
+            			System.out.println(state.getThenStatement());
+            			System.out.println(state.getElseStatement());
             			temp.add("if");
             		} else if( statement.getNodeType() == 61) {
             			temp.add("while");
@@ -123,15 +126,5 @@ public class DebugHandler extends AbstractHandler {
         parser.setResolveBindings(true);
         return (CompilationUnit) parser.createAST(null); // parse
     }
-    
-//    @SuppressWarnings("deprecation")
-//	private static CompilationUnit parseStatement(ICompilationUnit unit) {
-//		ASTParser parser = ASTParser.newParser(AST.JLS4);
-//    	parser.setKind(ASTParser.K_STATEMENTS);
-//    	parser.setSource(unit);
-//    	parser.setResolveBindings(true);
-//    	return (CompilationUnit) parser.createAST(null);
-//    }
-
 }
 
