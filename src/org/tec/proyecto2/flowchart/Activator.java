@@ -2,6 +2,9 @@ package org.tec.proyecto2.flowchart;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.tec.proyecto2.flowchart.handlers.BreakpointActionDelegate;
+
+import static org.eclipse.jdt.debug.core.JDIDebugModel.addJavaBreakpointListener;
 
 public class Activator implements BundleActivator {
 
@@ -17,6 +20,7 @@ public class Activator implements BundleActivator {
 	 */
 	public void start(BundleContext bundleContext) throws Exception {
 		Activator.context = bundleContext;
+		addJavaBreakpointListener(new BreakpointActionDelegate());
 	}
 
 	/*

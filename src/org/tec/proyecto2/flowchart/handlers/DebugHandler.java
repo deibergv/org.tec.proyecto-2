@@ -8,6 +8,7 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
@@ -28,7 +29,6 @@ import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
 //import org.eclipse.jdt.core.dom.ASTVisitor;
 //import org.eclipse.jdt.core.dom.Block;
-//import org.eclipse.jdt.debug.core.JDIDebugModel;
 //import org.eclipse.jdt.internal.debug.core.model.*;
 import static org.tec.proyecto2.flowchart.parts.SampleView.figureGen;
 
@@ -36,12 +36,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DebugHandler extends AbstractHandler {
+	
+	
 
     private static final String JDT_NATURE = "org.eclipse.jdt.core.javanature";
     public static ArrayList<ArrayList<String>> input = new ArrayList<>();
     
     @Override
     public Object execute(ExecutionEvent event) throws ExecutionException {
+    	
+    	
+    	
         input.clear();
         IWorkspace workspace = ResourcesPlugin.getWorkspace();
         IWorkspaceRoot root = workspace.getRoot();

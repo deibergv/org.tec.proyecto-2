@@ -32,4 +32,5 @@ Require-Bundle: javax.inject;bundle-version="1.0.0",
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.tec.proyecto2.flowchart;uses:="org.osgi.framework",
+ org.tec.proyecto2.flowchart.handlers,
  org.tec.proyecto2.flowchart.parts;uses:="org.eclipse.swt.widgets,org.eclipse.jface.viewers"

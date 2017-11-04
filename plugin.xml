@@ -81,5 +81,12 @@
 	         </toolbar>
 	      </menuContribution>
    </extension>
+   <extension
+       point="org.eclipse.jdt.debug.breakpointListeners">
+   <breakpointActionDelegate
+          class="org.tec.proyecto2.flowchart.handlers.BreakpointActionDelegate"
+          id="com.example.breakpoint.action">
+    </breakpointActionDelegate>
+</extension>
 </plugin>
  
