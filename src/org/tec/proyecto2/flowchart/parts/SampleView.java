@@ -56,7 +56,7 @@ public class SampleView {
 		
 		ArrayList<ActivityFigure> activities = new ArrayList<>();
 		
-		int y = 40;
+		int y = 60;
 		
 		for (String statement : array) {
 			String[] part = statement.split("~");
