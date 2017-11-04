@@ -57,7 +57,11 @@ public class SampleView {
 		
 		ArrayList<ActivityFigure> activities = new ArrayList<>();
 		
+<<<<<<< HEAD
 		int y = 110;
+=======
+		int y = 60;
+>>>>>>> master
 		
 		for (String statement : array) {
 			String[] part = statement.split("~");
