@@ -55,14 +55,12 @@ public class SampleView {
 		start.setBounds(new Rectangle(40, 20, 80, 20));
 		flowchart.add(start);
 		
-		ArrayList<ActivityFigure> activities = new ArrayList<>();
+//		ArrayList<?> activities = new ArrayList<>();
 		
-<<<<<<< HEAD
 		int y = 110;
-=======
-		int y = 60;
->>>>>>> master
-		
+		Object temp = null;
+		int type = 0;
+
 		for (String statement : array) {
 			String[] part = statement.split("~");
 			System.out.println(part[0]);
@@ -71,36 +69,171 @@ public class SampleView {
 			if (part[0].compareTo("if") == 0) {
 				DecisionFigure dec = new DecisionFigure();
 				dec.setName("if");
-				activities.add(dec);
+//				activities.add(dec);
 				flowchart.add(dec);
 				dec.setBounds(new Rectangle(30, y, 100, 60));
+				PathFigure path1 = new PathFigure();
+				PathFigure path2 = new PathFigure();
+				if (temp == null) {
+					path1.setSourceAnchor(start.outAnchor);
+					path1.setTargetAnchor(dec.inAnchor);
+					temp = dec;
+					type = 1;
+				} else {
+					if (type == 1) {
+						DecisionFigure otemp = (DecisionFigure)temp;
+						path1.setSourceAnchor(otemp.yesAnchor);
+						path1.setTargetAnchor(dec.inAnchor);
+						temp = dec;
+					} else if (type == 2) {
+						ProcessFigure otemp = (ProcessFigure)temp;
+						path1.setSourceAnchor(otemp.outAnchor);
+						path1.setTargetAnchor(dec.inAnchor);
+						temp = dec;
+						type = 1;
+					}
+					
+				}
+				
 			} else if (part[0].compareTo("for") == 0) {
 				DecisionFigure dec = new DecisionFigure();
 				dec.setName("for");
-				activities.add(dec);
+//				activities.add(dec);
 				flowchart.add(dec);
-				dec.setBounds(new Rectangle(30, y, 100, 60));	//Se pueden hacer en una sola, if, for y while
+				dec.setBounds(new Rectangle(30, y, 100, 60)); //Se pueden hacer en una sola, if, for y while
+				PathFigure path1 = new PathFigure();
+				PathFigure path2 = new PathFigure();
+				if (temp == null) {
+					path1.setSourceAnchor(start.outAnchor);
+					path1.setTargetAnchor(dec.inAnchor);
+					path2.setSourceAnchor(dec.noAnchor);
+					path2.setTargetAnchor(dec.inAnchor);
+					temp = dec;
+					type = 1;
+				} else {
+					if (type == 1) {
+						DecisionFigure otemp = (DecisionFigure)temp;
+						path1.setSourceAnchor(otemp.yesAnchor);
+						path1.setTargetAnchor(dec.inAnchor);
+						path2.setSourceAnchor(dec.noAnchor);
+						path2.setTargetAnchor(dec.inAnchor);
+						temp = dec;
+					} else if (type == 2) {
+						ProcessFigure otemp = (ProcessFigure)temp;
+						path1.setSourceAnchor(otemp.outAnchor);
+						path1.setTargetAnchor(dec.inAnchor);
+						path2.setSourceAnchor(dec.noAnchor);
+						path2.setTargetAnchor(dec.inAnchor);
+						temp = dec;
+						type = 1;
+					}
+				}
+				
 			} else if (part[0].compareTo("while") == 0) {
 				DecisionFigure dec = new DecisionFigure();
 				dec.setName("while");
-				activities.add(dec);
+//				activities.add(dec);
 				flowchart.add(dec);
 				dec.setBounds(new Rectangle(30, y, 100, 60));
+				PathFigure path1 = new PathFigure();
+				PathFigure path2 = new PathFigure();
+				if (temp == null) {
+					path1.setSourceAnchor(start.outAnchor);
+					path1.setTargetAnchor(dec.inAnchor);
+					path2.setSourceAnchor(dec.noAnchor);
+					path2.setTargetAnchor(dec.inAnchor);
+					temp = dec;
+					type = 1;
+				} else {
+					if (type == 1) {
+						DecisionFigure otemp = (DecisionFigure)temp;
+						path1.setSourceAnchor(otemp.yesAnchor);
+						path1.setTargetAnchor(dec.inAnchor);
+						path2.setSourceAnchor(dec.noAnchor);
+						path2.setTargetAnchor(dec.inAnchor);
+						temp = dec;
+					} else if (type == 2) {
+						ProcessFigure otemp = (ProcessFigure)temp;
+						path1.setSourceAnchor(otemp.outAnchor);
+						path1.setTargetAnchor(dec.inAnchor);
+						path2.setSourceAnchor(dec.noAnchor);
+						path2.setTargetAnchor(dec.inAnchor);
+						temp = dec;
+						type = 1;
+					}
+				}
+				
 			} else if (part[0].compareTo("var") == 0) {
 				ProcessFigure dec = new ProcessFigure();
 				dec.setName("ok");
-				activities.add(dec);
+//				activities.add(dec);
 				flowchart.add(dec);
 				dec.setBounds(new Rectangle(40, y, 80, 40));
+				PathFigure path = new PathFigure();
+				if (temp == null) {
+					path.setSourceAnchor(start.outAnchor);
+					path.setTargetAnchor(dec.inAnchor);
+					temp = dec;
+					type = 2;
+				} else {
+					if (type == 1) {
+						DecisionFigure otemp = (DecisionFigure)temp;
+						path.setSourceAnchor(otemp.yesAnchor);
+						path.setTargetAnchor(dec.inAnchor);
+						temp = dec;
+						type =2;
+					} else if (type == 2) {
+						ProcessFigure otemp = (ProcessFigure)temp;
+						path.setSourceAnchor(otemp.outAnchor);
+						path.setTargetAnchor(dec.inAnchor);
+						temp = dec;
+					}
+				}
+				
 			} else if (part[0].compareTo("exp") == 0) {
 				ProcessFigure dec = new ProcessFigure();
 				dec.setName("exp");
-				activities.add(dec);
+//				activities.add(dec);
 				flowchart.add(dec);
 				dec.setBounds(new Rectangle(40, y, 80, 40));
+				PathFigure path = new PathFigure();
+				if (temp == null) {
+					path.setSourceAnchor(start.outAnchor);
+					path.setTargetAnchor(dec.inAnchor);
+					temp = dec;
+					type = 2;
+				} else {
+					if (type == 1) {
+						DecisionFigure otemp = (DecisionFigure)temp;
+						path.setSourceAnchor(otemp.yesAnchor);
+						path.setTargetAnchor(dec.inAnchor);
+						temp = dec;
+						type =2;
+					} else if (type == 2) {
+						ProcessFigure otemp = (ProcessFigure)temp;
+						path.setSourceAnchor(otemp.outAnchor);
+						path.setTargetAnchor(dec.inAnchor);
+						temp = dec;
+					}
+				}
+				
 			}
 			y+=110;
 		}
+		
+//		for (int i=0; i < activities.size() ; i++) {
+//			if (i == 0) {
+//				if (activities.get(i).getClass().getName().
+//						compareTo("DecisionFigure") == 0) {
+//					DecisionFigure des = (DecisionFigure)activities.get(i);
+//					PathFigure path = new PathFigure();
+//					path.setSourceAnchor(start.outAnchor);
+//					path.setTargetAnchor(des.);
+//				}
+//				
+//			}
+//		}
+		
         canvas.update();
 	}
 		
@@ -143,14 +276,6 @@ public class SampleView {
 //		path4.setSourceAnchor(proc.outAnchor);
 //		path4.setTargetAnchor(stop.inAnchor);
 
-//		flowchart.add(start);
-//		flowchart.add(dec);
-//		flowchart.add(proc);
-//		flowchart.add(stop);
-//		flowchart.add(path1);
-//		flowchart.add(path2);
-//		flowchart.add(path3);
-//		flowchart.add(path4);
 
 //		new Dnd(start);
 //		new Dnd(proc);
