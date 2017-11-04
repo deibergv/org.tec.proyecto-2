@@ -38,10 +38,11 @@ import java.util.List;
 public class DebugHandler extends AbstractHandler {
 
     private static final String JDT_NATURE = "org.eclipse.jdt.core.javanature";
-    private static ArrayList<ArrayList<String>> input = new ArrayList<>();
+    public static ArrayList<ArrayList<String>> input = new ArrayList<>();
     
     @Override
     public Object execute(ExecutionEvent event) throws ExecutionException {
+        input.clear();
         IWorkspace workspace = ResourcesPlugin.getWorkspace();
         IWorkspaceRoot root = workspace.getRoot();
         // Get all projects in the workspace
@@ -67,6 +68,8 @@ public class DebugHandler extends AbstractHandler {
                 createAST(mypackage);
             }
         }
+        figureGen(input.get(0));
+
     }
 
     private void createAST (IPackageFragment mypackage) throws JavaModelException {
@@ -101,11 +104,7 @@ public class DebugHandler extends AbstractHandler {
             		}
             	}
             	input.add(temp);
-            }
-//            cons.setListaGrafo(input);
-            figureGen(input);
-            input.clear();
-
+            }           
         }
     }
 

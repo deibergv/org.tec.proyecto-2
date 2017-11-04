@@ -27,25 +27,24 @@ import java.util.ArrayList;
 
 public class SampleView {
 	
-	private static Canvas canvas;
+	private static ScrolledComposite ScrollComposite;
 
 	@PostConstruct
 	public void createPartControl(Composite parent) {
 
-		ScrolledComposite ScrollComposite = new ScrolledComposite(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		ScrollComposite = new ScrolledComposite(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		ScrollComposite.setExpandHorizontal(true);
 		ScrollComposite.setExpandVertical(true);
 		ScrollComposite.setMinWidth(500);
 		ScrollComposite.setMinHeight(10000);
-		canvas = new Canvas(ScrollComposite, SWT.NONE);
-		ScrollComposite.setContent(canvas);
 	}	
 	
-	public static void figureGen(ArrayList<ArrayList<String>> cons) {
+	public static void figureGen(ArrayList<String> array) {
+		
+		Canvas canvas = new Canvas(ScrollComposite, SWT.NONE);
+		ScrollComposite.setContent(canvas);
 		
 		LightweightSystem lws = new LightweightSystem(canvas);	
-		
-		ArrayList<String> array = cons.get(0);
 		
 		ChartFigure flowchart = new ChartFigure();
 		lws.setContents(flowchart);
@@ -55,10 +54,8 @@ public class SampleView {
 		start.setBounds(new Rectangle(40, 20, 80, 20));
 		flowchart.add(start);
 		
-//		ArrayList<?> activities = new ArrayList<>();
-		
 		int y = 110;
-		Object temp = null;
+		ActivityFigure temp = null;
 		int type = 0;
 
 		for (String statement : array) {
@@ -69,9 +66,9 @@ public class SampleView {
 			if (part[0].compareTo("if") == 0) {
 				DecisionFigure dec = new DecisionFigure();
 				dec.setName("if");
-//				activities.add(dec);
 				flowchart.add(dec);
 				dec.setBounds(new Rectangle(30, y, 100, 60));
+				new Dnd(dec);
 				PathFigure path1 = new PathFigure();
 				PathFigure path2 = new PathFigure();
 				if (temp == null) {
@@ -92,15 +89,15 @@ public class SampleView {
 						temp = dec;
 						type = 1;
 					}
-					
 				}
+				flowchart.add(path1);
 				
 			} else if (part[0].compareTo("for") == 0) {
 				DecisionFigure dec = new DecisionFigure();
 				dec.setName("for");
-//				activities.add(dec);
 				flowchart.add(dec);
 				dec.setBounds(new Rectangle(30, y, 100, 60)); //Se pueden hacer en una sola, if, for y while
+				new Dnd(dec);
 				PathFigure path1 = new PathFigure();
 				PathFigure path2 = new PathFigure();
 				if (temp == null) {
@@ -128,13 +125,15 @@ public class SampleView {
 						type = 1;
 					}
 				}
+				flowchart.add(path1);
+				flowchart.add(path2);
 				
 			} else if (part[0].compareTo("while") == 0) {
 				DecisionFigure dec = new DecisionFigure();
 				dec.setName("while");
-//				activities.add(dec);
 				flowchart.add(dec);
 				dec.setBounds(new Rectangle(30, y, 100, 60));
+				new Dnd(dec);
 				PathFigure path1 = new PathFigure();
 				PathFigure path2 = new PathFigure();
 				if (temp == null) {
@@ -162,13 +161,15 @@ public class SampleView {
 						type = 1;
 					}
 				}
+				flowchart.add(path1);
+				flowchart.add(path2);
 				
 			} else if (part[0].compareTo("var") == 0) {
 				ProcessFigure dec = new ProcessFigure();
-				dec.setName("ok");
-//				activities.add(dec);
+				dec.setName("var");
 				flowchart.add(dec);
 				dec.setBounds(new Rectangle(40, y, 80, 40));
+				new Dnd(dec);
 				PathFigure path = new PathFigure();
 				if (temp == null) {
 					path.setSourceAnchor(start.outAnchor);
@@ -189,13 +190,14 @@ public class SampleView {
 						temp = dec;
 					}
 				}
+				flowchart.add(path);
 				
 			} else if (part[0].compareTo("exp") == 0) {
 				ProcessFigure dec = new ProcessFigure();
 				dec.setName("exp");
-//				activities.add(dec);
 				flowchart.add(dec);
 				dec.setBounds(new Rectangle(40, y, 80, 40));
+				new Dnd(dec);
 				PathFigure path = new PathFigure();
 				if (temp == null) {
 					path.setSourceAnchor(start.outAnchor);
@@ -216,29 +218,13 @@ public class SampleView {
 						temp = dec;
 					}
 				}
+				flowchart.add(path);
 				
 			}
 			y+=110;
 		}
-		
-//		for (int i=0; i < activities.size() ; i++) {
-//			if (i == 0) {
-//				if (activities.get(i).getClass().getName().
-//						compareTo("DecisionFigure") == 0) {
-//					DecisionFigure des = (DecisionFigure)activities.get(i);
-//					PathFigure path = new PathFigure();
-//					path.setSourceAnchor(start.outAnchor);
-//					path.setTargetAnchor(des.);
-//				}
-//				
-//			}
-//		}
-		
         canvas.update();
 	}
-		
-		
-		
 		
 		// Creacion de figuras
 //		TerminatorFigure start = new TerminatorFigure();
@@ -257,10 +243,6 @@ public class SampleView {
 		
 //		stop.setBounds(new Rectangle(40, 300, 80, 20)); // Problemas con la posicion...
 		//		stop.setForegroundColor(ColorConstants.red);	// Cambio de color de figura
-
-		
-		
-		
 		
 		// Union de figuras
 //		PathFigure path1 = new PathFigure();
@@ -276,7 +258,6 @@ public class SampleView {
 //		path4.setSourceAnchor(proc.outAnchor);
 //		path4.setTargetAnchor(stop.inAnchor);
 
-
 //		new Dnd(start);
 //		new Dnd(proc);
 //		new Dnd(dec); // PERMITE MOVIMIENTO
@@ -284,35 +265,35 @@ public class SampleView {
 //
 //	}
 
-//	class Dnd extends MouseMotionListener.Stub implements MouseListener {
-//		// PERMITE MOVIMIENTO y otras cosas
-//		public Dnd(IFigure figure) {
-//			figure.addMouseMotionListener(this);
-//			figure.addMouseListener(this);
-//		}
-//
-//		Point start;
-//
-//		@Override
-//		public void mousePressed(MouseEvent e) {
-//			start = e.getLocation();
-//		}
-//
-//		@Override
-//		public void mouseDragged(MouseEvent e) {
-//			Point p = e.getLocation();
-//			Dimension d = p.getDifference(start);
-//			start = p;
-//			Figure f = ((Figure) e.getSource());
-//			f.setBounds(f.getBounds().getTranslated(d.width, d.height));
-//		}
-//
-//		@Override
-//		public void mouseReleased(MouseEvent me) {
-//		}
-//
-//		@Override
-//		public void mouseDoubleClicked(MouseEvent me) {
-//		}
-//	}
+	static class Dnd extends MouseMotionListener.Stub implements MouseListener {
+		// PERMITE MOVIMIENTO y otras cosas
+		public Dnd(IFigure figure) {
+			figure.addMouseMotionListener(this);
+			figure.addMouseListener(this);
+		}
+
+		Point start;
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			start = e.getLocation();
+		}
+
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			Point p = e.getLocation();
+			Dimension d = p.getDifference(start);
+			start = p;
+			Figure f = ((Figure) e.getSource());
+			f.setBounds(f.getBounds().getTranslated(d.width, d.height));
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent me) {
+		}
+
+		@Override
+		public void mouseDoubleClicked(MouseEvent me) {
+		}
+	}
 }
