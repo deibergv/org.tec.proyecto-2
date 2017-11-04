@@ -22,13 +22,12 @@ import org.tec.proyecto2.flowchart.figures.DecisionFigure;
 import org.tec.proyecto2.flowchart.figures.PathFigure;
 import org.tec.proyecto2.flowchart.figures.ProcessFigure;
 import org.tec.proyecto2.flowchart.figures.TerminatorFigure;
-//import static org.tec.proyecto2.flowchart.handlers.DebugHandler.cons;
 
 import java.util.ArrayList;
 
 public class SampleView {
 	
-	private static LightweightSystem lws;
+	private static Canvas canvas;
 
 	@PostConstruct
 	public void createPartControl(Composite parent) {
@@ -38,49 +37,66 @@ public class SampleView {
 		ScrollComposite.setExpandVertical(true);
 		ScrollComposite.setMinWidth(500);
 		ScrollComposite.setMinHeight(10000);
-		Canvas canvas = new Canvas(ScrollComposite, SWT.NONE);
-		lws = new LightweightSystem(canvas);		
+		canvas = new Canvas(ScrollComposite, SWT.NONE);
 		ScrollComposite.setContent(canvas);
 	}	
 	
 	public static void figureGen(ArrayList<ArrayList<String>> cons) {
 		
+		LightweightSystem lws = new LightweightSystem(canvas);	
+		
 		ArrayList<String> array = cons.get(0);
 		
 		ChartFigure flowchart = new ChartFigure();
-
 		lws.setContents(flowchart);
-		
+
 		TerminatorFigure start = new TerminatorFigure();
 		start.setName("Start");
+		flowchart.add(start);
 		
 		ArrayList<ActivityFigure> activities = new ArrayList<>();
 		
+		int y = 40;
+		
 		for (String statement : array) {
 			String[] part = statement.split("~");
+			System.out.println(part[0]);
+			System.out.println(part[1]);
 			
-			if (part[0] == "if") {
+			if (part[0].compareTo("if") == 0) {
 				DecisionFigure dec = new DecisionFigure();
-				dec.setName(part[1]);
+				dec.setName("if");
 				activities.add(dec);
 				flowchart.add(dec);
-			} else if (part[0] == "for") {
+				dec.setBounds(new Rectangle(40, y, 80, 20));
+			} else if (part[0].compareTo("for") == 0) {
 				DecisionFigure dec = new DecisionFigure();
-				dec.setName(part[1]);
+				dec.setName("for");
 				activities.add(dec);
 				flowchart.add(dec);
-			} else if (part[0] == "while") {
+				dec.setBounds(new Rectangle(40, y, 80, 20));
+			} else if (part[0].compareTo("while") == 0) {
 				DecisionFigure dec = new DecisionFigure();
-				dec.setName(part[1]);
+				dec.setName("while");
 				activities.add(dec);
 				flowchart.add(dec);
-			} else if (part[0] == "var") {
+				dec.setBounds(new Rectangle(40, y, 80, 20));
+			} else if (part[0].compareTo("var") == 0) {
 				ProcessFigure dec = new ProcessFigure();
-				dec.setName(part[1]);
+				dec.setName("ok");
 				activities.add(dec);
 				flowchart.add(dec);
+				dec.setBounds(new Rectangle(40, y, 80, 20));
+			} else if (part[0].compareTo("exp") == 0) {
+				ProcessFigure dec = new ProcessFigure();
+				dec.setName("exp");
+				activities.add(dec);
+				flowchart.add(dec);
+				dec.setBounds(new Rectangle(40, y, 80, 20));
 			}
+			y+=60;
 		}
+        canvas.update();
 	}
 		
 		

@@ -17,18 +17,19 @@ import org.eclipse.jdt.core.dom.AST;
 //import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.ForStatement;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 //import org.eclipse.jdt.core.dom.SimpleName;
 //import org.eclipse.jdt.core.dom.ChildListPropertyDescriptor;
 import org.eclipse.jdt.core.dom.Statement;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
 //import org.eclipse.jdt.core.dom.ASTVisitor;
 //import org.eclipse.jdt.core.dom.Block;
 //import org.eclipse.jdt.debug.core.JDIDebugModel;
 //import org.eclipse.jdt.internal.debug.core.model.*;
-import org.tec.proyecto2.flowchart.parts.ChartFlowGen;
 import static org.tec.proyecto2.flowchart.parts.SampleView.figureGen;
 
 import java.util.ArrayList;
@@ -38,7 +39,6 @@ public class DebugHandler extends AbstractHandler {
 
     private static final String JDT_NATURE = "org.eclipse.jdt.core.javanature";
     private static ArrayList<ArrayList<String>> input = new ArrayList<>();
-    public static ChartFlowGen cons = new ChartFlowGen();
     
     @Override
     public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -73,16 +73,8 @@ public class DebugHandler extends AbstractHandler {
         for (ICompilationUnit unit : mypackage.getCompilationUnits()) {
             // now create the AST for the ICompilationUnits
             CompilationUnit parse = parse(unit);
-//            CompilationUnit parseStatement = parseStatement(unit);
             MethodVisitor visitor = new MethodVisitor();
             parse.accept(visitor);
-            
-//            parseStatement.accept(new ASTVisitor() { 
-//    			public boolean visit (Statement node) {
-//    				System.out.println("Type: " + node.getNodeType());
-//    				return true;
-//    				}
-//    			});
             
             for (MethodDeclaration method : visitor.getMethods()) {
             	List<Statement> names = method.getBody().statements();
@@ -91,18 +83,19 @@ public class DebugHandler extends AbstractHandler {
             	for (Statement statement : names) {            		
             		if (statement.getNodeType() == 24) {
             			ForStatement state = (ForStatement)statement;
-            			state.getExpression();
-            			temp.add("for"+"~"+state.getExpression().toString());
+            			temp.add("for"+"~"+state.getExpression());
             		} else if (statement.getNodeType() == 25) {
             			IfStatement state = (IfStatement)statement;
-            			temp.add("if"+"~"+state.getExpression().toString());
+            			temp.add("if"+"~"+state.getExpression());
             		} else if( statement.getNodeType() == 61) {
             			WhileStatement state = (WhileStatement)statement;  
-            			temp.add("while"+"~"+state.getExpression().toString());
+            			temp.add("while"+"~"+state.getExpression());
             		} else if( statement.getNodeType() == 21){
-            			temp.add("exp"+"~"+statement.toString());
+            			ExpressionStatement state = (ExpressionStatement)statement;
+            			temp.add("exp"+"~"+state.getExpression());
             		} else if( statement.getNodeType() == 60){
-            			temp.add("var"+"~"+statement.toString());
+            			VariableDeclarationStatement state = (VariableDeclarationStatement)statement;
+            			temp.add("var"+"~"+state.fragments().toString());
 //            		} else {
 //            			temp.add(statement.toString());
             		}
