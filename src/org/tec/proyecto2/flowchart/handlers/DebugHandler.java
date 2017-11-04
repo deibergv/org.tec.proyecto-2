@@ -14,19 +14,23 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTNode;
+//import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.ForStatement;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.SimpleName;
-import org.eclipse.jdt.core.dom.ChildListPropertyDescriptor;
+//import org.eclipse.jdt.core.dom.SimpleName;
+//import org.eclipse.jdt.core.dom.ChildListPropertyDescriptor;
 import org.eclipse.jdt.core.dom.Statement;
-import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.Block;
-import org.eclipse.jdt.debug.core.JDIDebugModel;
-import org.eclipse.jdt.internal.debug.core.model.*;
+import org.eclipse.jdt.core.dom.WhileStatement;
+//import org.eclipse.jdt.core.dom.ASTVisitor;
+//import org.eclipse.jdt.core.dom.Block;
+//import org.eclipse.jdt.debug.core.JDIDebugModel;
+//import org.eclipse.jdt.internal.debug.core.model.*;
+import org.tec.proyecto2.flowchart.parts.ChartFlowGen;
+import static org.tec.proyecto2.flowchart.parts.SampleView.figureGen;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +38,7 @@ public class DebugHandler extends AbstractHandler {
 
     private static final String JDT_NATURE = "org.eclipse.jdt.core.javanature";
     private static ArrayList<ArrayList<String>> input = new ArrayList<>();
+    public static ChartFlowGen cons = new ChartFlowGen();
     
     @Override
     public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -85,26 +90,27 @@ public class DebugHandler extends AbstractHandler {
             	
             	for (Statement statement : names) {            		
             		if (statement.getNodeType() == 24) {
-            			temp.add("for");
+            			ForStatement state = (ForStatement)statement;
+            			state.getExpression();
+            			temp.add("for"+"~"+state.getExpression().toString());
             		} else if (statement.getNodeType() == 25) {
             			IfStatement state = (IfStatement)statement;
-            			System.out.println(state.getExpression());
-            			System.out.println(state.getThenStatement());
-            			System.out.println(state.getElseStatement());
-            			temp.add("if");
+            			temp.add("if"+"~"+state.getExpression().toString());
             		} else if( statement.getNodeType() == 61) {
-            			temp.add("while");
+            			WhileStatement state = (WhileStatement)statement;  
+            			temp.add("while"+"~"+state.getExpression().toString());
             		} else if( statement.getNodeType() == 21){
-            			temp.add("exp");
+            			temp.add("exp"+"~"+statement.toString());
             		} else if( statement.getNodeType() == 60){
-            			temp.add("var");
-            		} else {
-            			temp.add(statement.toString());
+            			temp.add("var"+"~"+statement.toString());
+//            		} else {
+//            			temp.add(statement.toString());
             		}
             	}
             	input.add(temp);
             }
-            System.out.println(input);
+//            cons.setListaGrafo(input);
+            figureGen(input);
             input.clear();
 
         }
