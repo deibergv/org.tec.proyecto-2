@@ -52,11 +52,12 @@ public class SampleView {
 
 		TerminatorFigure start = new TerminatorFigure();
 		start.setName("Start");
+		start.setBounds(new Rectangle(40, 20, 80, 20));
 		flowchart.add(start);
 		
 		ArrayList<ActivityFigure> activities = new ArrayList<>();
 		
-		int y = 40;
+		int y = 110;
 		
 		for (String statement : array) {
 			String[] part = statement.split("~");
@@ -68,33 +69,33 @@ public class SampleView {
 				dec.setName("if");
 				activities.add(dec);
 				flowchart.add(dec);
-				dec.setBounds(new Rectangle(40, y, 80, 20));
+				dec.setBounds(new Rectangle(30, y, 100, 60));
 			} else if (part[0].compareTo("for") == 0) {
 				DecisionFigure dec = new DecisionFigure();
 				dec.setName("for");
 				activities.add(dec);
 				flowchart.add(dec);
-				dec.setBounds(new Rectangle(40, y, 80, 20));
+				dec.setBounds(new Rectangle(30, y, 100, 60));	//Se pueden hacer en una sola, if, for y while
 			} else if (part[0].compareTo("while") == 0) {
 				DecisionFigure dec = new DecisionFigure();
 				dec.setName("while");
 				activities.add(dec);
 				flowchart.add(dec);
-				dec.setBounds(new Rectangle(40, y, 80, 20));
+				dec.setBounds(new Rectangle(30, y, 100, 60));
 			} else if (part[0].compareTo("var") == 0) {
 				ProcessFigure dec = new ProcessFigure();
 				dec.setName("ok");
 				activities.add(dec);
 				flowchart.add(dec);
-				dec.setBounds(new Rectangle(40, y, 80, 20));
+				dec.setBounds(new Rectangle(40, y, 80, 40));
 			} else if (part[0].compareTo("exp") == 0) {
 				ProcessFigure dec = new ProcessFigure();
 				dec.setName("exp");
 				activities.add(dec);
 				flowchart.add(dec);
-				dec.setBounds(new Rectangle(40, y, 80, 20));
+				dec.setBounds(new Rectangle(40, y, 80, 40));
 			}
-			y+=60;
+			y+=110;
 		}
         canvas.update();
 	}

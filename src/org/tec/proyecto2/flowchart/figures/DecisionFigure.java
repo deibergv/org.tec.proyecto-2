@@ -19,7 +19,6 @@ public class DecisionFigure extends ActivityFigure {
 		yesAnchor = new FixedAnchor(this);
 		yesAnchor.place = new Point(1, 2);
 		sourceAnchors.put("yes", yesAnchor);
-		setBounds(new Rectangle(30, 80, 100, 60));
 	}
 
 	public void paintFigure(Graphics g) {

@@ -15,7 +15,6 @@ public class TerminatorFigure extends ActivityFigure {
 		outAnchor = new FixedAnchor(this);
 		outAnchor.place = new Point(1, 2);
 		sourceAnchors.put("out_term", outAnchor);
-		setBounds(new Rectangle(40, 20, 80, 20));
 	}
 
 	public void paintFigure(Graphics g) {
