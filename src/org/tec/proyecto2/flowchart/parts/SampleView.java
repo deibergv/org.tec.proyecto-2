@@ -2,6 +2,7 @@ package org.tec.proyecto2.flowchart.parts;
 
 import javax.annotation.PostConstruct;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.LightweightSystem;
@@ -26,32 +27,45 @@ public class SampleView {
 	@PostConstruct
 	public void createPartControl(Composite parent) {
 
-		 ScrolledComposite ScrollComposite = new ScrolledComposite(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-		 ScrollComposite.setExpandHorizontal(true);
-		 ScrollComposite.setExpandVertical(true);
-		 ScrollComposite.setMinWidth(500);
-		 ScrollComposite.setMinHeight(10000);
-		
+		ScrolledComposite ScrollComposite = new ScrolledComposite(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		ScrollComposite.setExpandHorizontal(true);
+		ScrollComposite.setExpandVertical(true);
+		ScrollComposite.setMinWidth(500);
+		ScrollComposite.setMinHeight(10000);
 		Canvas canvas = new Canvas(ScrollComposite, SWT.NONE);
 		LightweightSystem lws = new LightweightSystem(canvas);
 		ChartFigure flowchart = new ChartFigure();
 		lws.setContents(flowchart);
-		
 		ScrollComposite.setContent(canvas);
 
+		
+		
+		
+		
+		
+		// Creacion de figuras
 		TerminatorFigure start = new TerminatorFigure();
 		start.setName("Start");
-//		start.setBounds(new Rectangle(40, 20, 80, 20));
+		// start.setBounds(new Rectangle(40, 20, 80, 20));
 		DecisionFigure dec = new DecisionFigure();
 		dec.setName("Should I?");
-//		dec.setBounds(new Rectangle(30, 80, 100, 60));
+		// dec.setBounds(new Rectangle(30, 80, 100, 60));
 		ProcessFigure proc = new ProcessFigure();
 		proc.setName("Do it!");
-//		proc.setBounds(new Rectangle(40, 160, 80, 40));
+		// proc.setBounds(new Rectangle(40, 160, 80, 40));
 		TerminatorFigure stop = new TerminatorFigure();
 		stop.setName("End");
-		stop.setBounds(new Rectangle(40, 300, 80, 20));		// Problemas con la posicion...
+		
+		
+		
+		stop.setBounds(new Rectangle(40, 300, 80, 20)); // Problemas con la posicion...
+		//		stop.setForegroundColor(ColorConstants.red);	// Cambio de color de figura
 
+		
+		
+		
+		
+		// Union de figuras
 		PathFigure path1 = new PathFigure();
 		path1.setSourceAnchor(start.outAnchor);
 		path1.setTargetAnchor(dec.inAnchor);
@@ -78,7 +92,7 @@ public class SampleView {
 		new Dnd(proc);
 		new Dnd(dec); // PERMITE MOVIMIENTO
 		new Dnd(stop);
-		
+
 	}
 
 	class Dnd extends MouseMotionListener.Stub implements MouseListener {
@@ -90,19 +104,12 @@ public class SampleView {
 
 		Point start;
 
-		public void mouseReleased(MouseEvent e) {
-		}
-
-		public void mouseClicked(MouseEvent e) {
-		}
-
-		public void mouseDoubleClicked(MouseEvent e) {
-		}
-
+		@Override
 		public void mousePressed(MouseEvent e) {
 			start = e.getLocation();
 		}
 
+		@Override
 		public void mouseDragged(MouseEvent e) {
 			Point p = e.getLocation();
 			Dimension d = p.getDifference(start);
@@ -110,6 +117,13 @@ public class SampleView {
 			Figure f = ((Figure) e.getSource());
 			f.setBounds(f.getBounds().getTranslated(d.width, d.height));
 		}
+
+		@Override
+		public void mouseReleased(MouseEvent me) {
+		}
+
+		@Override
+		public void mouseDoubleClicked(MouseEvent me) {
+		}
 	}
 }
-
