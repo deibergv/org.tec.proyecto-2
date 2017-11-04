@@ -13,8 +13,13 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.widgets.*;
-import org.tec.proyecto2.flowchart.figures.*;
+import org.eclipse.swt.widgets.Canvas;
+import org.eclipse.swt.widgets.Composite;
+import org.tec.proyecto2.flowchart.figures.ChartFigure;
+import org.tec.proyecto2.flowchart.figures.DecisionFigure;
+import org.tec.proyecto2.flowchart.figures.PathFigure;
+import org.tec.proyecto2.flowchart.figures.ProcessFigure;
+import org.tec.proyecto2.flowchart.figures.TerminatorFigure;
 
 public class SampleView {
 
@@ -31,25 +36,21 @@ public class SampleView {
 		LightweightSystem lws = new LightweightSystem(canvas);
 		ChartFigure flowchart = new ChartFigure();
 		lws.setContents(flowchart);
-
+		
 		ScrollComposite.setContent(canvas);
-		
-		
-		// fillToolBar();
-		// createToolbar(parent);
 
 		TerminatorFigure start = new TerminatorFigure();
 		start.setName("Start");
-		start.setBounds(new Rectangle(40, 20, 80, 20));
+//		start.setBounds(new Rectangle(40, 20, 80, 20));
 		DecisionFigure dec = new DecisionFigure();
 		dec.setName("Should I?");
-		dec.setBounds(new Rectangle(30, 80, 100, 60));
+//		dec.setBounds(new Rectangle(30, 80, 100, 60));
 		ProcessFigure proc = new ProcessFigure();
 		proc.setName("Do it!");
-		proc.setBounds(new Rectangle(40, 160, 80, 40));
+//		proc.setBounds(new Rectangle(40, 160, 80, 40));
 		TerminatorFigure stop = new TerminatorFigure();
 		stop.setName("End");
-		stop.setBounds(new Rectangle(40, 300, 80, 20));
+		stop.setBounds(new Rectangle(40, 300, 80, 20));		// Problemas con la posicion...
 
 		PathFigure path1 = new PathFigure();
 		path1.setSourceAnchor(start.outAnchor);
@@ -77,20 +78,8 @@ public class SampleView {
 		new Dnd(proc);
 		new Dnd(dec); // PERMITE MOVIMIENTO
 		new Dnd(stop);
-
+		
 	}
-
-	// private void fillToolBar() {
-	// ZoomContributionViewItem toolbarZoomContributionViewItem = new
-	// ZoomContributionViewItem(this);
-	// IActionBars bars = getViewSite().getActionBars();
-	// bars.getMenuManager().add(toolbarZoomContributionViewItem);
-	// }
-	//
-	// @Override
-	// public AbstractZoomableViewer getZoomableViewer() {
-	// return viewer;
-	// }
 
 	class Dnd extends MouseMotionListener.Stub implements MouseListener {
 		// PERMITE MOVIMIENTO y otras cosas
@@ -121,30 +110,6 @@ public class SampleView {
 			Figure f = ((Figure) e.getSource());
 			f.setBounds(f.getBounds().getTranslated(d.width, d.height));
 		}
-	}
-
-	public void createToolbar(Composite parent) {
-		ToolBar toolBar = new ToolBar(parent, SWT.BORDER | SWT.FLAT);
-
-		ToolItem item = new ToolItem(toolBar, SWT.PUSH);
-		item.setText("TEST");
-		item = new ToolItem(toolBar, SWT.PUSH);
-		item.setText("Boton prueba");
-		// new ToolItem(toolBar, SWT.SEPARATOR);
-		// item = new ToolItem(toolBar, SWT.CHECK);
-		// item.setText("Check One");
-		// item = new ToolItem(toolBar, SWT.CHECK);
-		// item.setText("Check Two");
-		// new ToolItem(toolBar, SWT.SEPARATOR);
-		// item = new ToolItem(toolBar, SWT.RADIO);
-		// item.setText("Radio One");
-		// item = new ToolItem(toolBar, SWT.RADIO);
-		// item.setText("Radio Two");
-		// new ToolItem(toolBar, SWT.SEPARATOR);
-		// item = new ToolItem(toolBar, SWT.DROP_DOWN);
-		// item.setText("Dropdown One");
-		// item = new ToolItem(toolBar, SWT.DROP_DOWN);
-		// item.setText("Dropdown Two");
 	}
 }
 

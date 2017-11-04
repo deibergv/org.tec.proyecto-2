@@ -16,6 +16,7 @@ public class ProcessFigure extends ActivityFigure {
 		outAnchor = new FixedAnchor(this);
 		outAnchor.place = new Point(1, 2);
 		sourceAnchors.put("out_proc", outAnchor);
+		setBounds(new Rectangle(40, 160, 80, 40));
 	}
 
 	public void paintFigure(Graphics g) {
