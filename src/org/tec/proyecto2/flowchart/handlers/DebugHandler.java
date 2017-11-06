@@ -65,7 +65,7 @@ public class DebugHandler extends AbstractHandler {
         return null;
     }
 
-    private void analyseMethods(IProject project) throws JavaModelException {
+    public void analyseMethods(IProject project) throws JavaModelException {
         IPackageFragment[] packages = JavaCore.create(project).getPackageFragments();
         // parse(JavaCore.create(project));
         for (IPackageFragment mypackage : packages) {
@@ -77,7 +77,7 @@ public class DebugHandler extends AbstractHandler {
 
     }
 
-    private void createAST (IPackageFragment mypackage) throws JavaModelException {
+    public void createAST (IPackageFragment mypackage) throws JavaModelException {
         for (ICompilationUnit unit : mypackage.getCompilationUnits()) {
             // now create the AST for the ICompilationUnits
             CompilationUnit parse = parse(unit);

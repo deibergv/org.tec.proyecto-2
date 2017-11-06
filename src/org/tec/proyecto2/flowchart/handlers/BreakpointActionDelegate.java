@@ -1,6 +1,10 @@
 package org.tec.proyecto2.flowchart.handlers;
 
+import org.eclipse.core.resources.IResource;
 import org.eclipse.debug.core.DebugException;
+import org.eclipse.debug.core.model.IDebugTarget;
+import org.eclipse.debug.core.model.ISourceLocator;
+import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.jdt.core.dom.Message;
 import org.eclipse.jdt.debug.core.IJavaBreakpoint;
 import org.eclipse.jdt.debug.core.IJavaBreakpointListener;
@@ -8,6 +12,7 @@ import org.eclipse.jdt.debug.core.IJavaDebugTarget;
 import org.eclipse.jdt.debug.core.IJavaLineBreakpoint;
 import org.eclipse.jdt.debug.core.IJavaThread;
 import org.eclipse.jdt.debug.core.IJavaType;
+import org.eclipse.jdt.internal.ui.IResourceLocator;
 import org.eclipse.ui.actions.ActionDelegate;
 
 public class BreakpointActionDelegate extends ActionDelegate implements IJavaBreakpointListener {
@@ -33,7 +38,18 @@ public class BreakpointActionDelegate extends ActionDelegate implements IJavaBre
 	@Override
 	public int breakpointHit(IJavaThread thread, IJavaBreakpoint breakpoint) {
 	    System.out.println("Just hit a breakpoint!");
-	    // Save pointers to the thread & breakpoint for future use.
+	    IStackFrame topStackFrame;
+		try {
+			topStackFrame = thread.getTopStackFrame();
+//			topStackFrame.getLaunch().getSourceLocator().getSourceElement(thread.getTopStackFr
+			int debuggedLineNumber = topStackFrame.getLineNumber();
+			String resource = topStackFrame.getLaunch().getSourceLocator().getSourceElement(thread.getTopStackFrame()).toString();
+			IDebugTarget[] debuggedClassPath = topStackFrame.getLaunch().getDebugTargets();
+			
+		} catch (DebugException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	    return 0;
 	}
 	
