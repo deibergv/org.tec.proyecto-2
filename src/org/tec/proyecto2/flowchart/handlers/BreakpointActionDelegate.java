@@ -16,6 +16,8 @@ import org.eclipse.jdt.internal.ui.IResourceLocator;
 import org.eclipse.ui.actions.ActionDelegate;
 
 public class BreakpointActionDelegate extends ActionDelegate implements IJavaBreakpointListener {
+	
+	public static IJavaThread thread;
 
 	@Override
 	public void addingBreakpoint(IJavaDebugTarget arg0, IJavaBreakpoint arg1) {
@@ -37,14 +39,16 @@ public class BreakpointActionDelegate extends ActionDelegate implements IJavaBre
 
 	@Override
 	public int breakpointHit(IJavaThread thread, IJavaBreakpoint breakpoint) {
-	    System.out.println("Just hit a breakpoint!");
+		
+		this.thread = thread;
 	    IStackFrame topStackFrame;
 		try {
 			topStackFrame = thread.getTopStackFrame();
 //			topStackFrame.getLaunch().getSourceLocator().getSourceElement(thread.getTopStackFr
 			int debuggedLineNumber = topStackFrame.getLineNumber();
 			String resource = topStackFrame.getLaunch().getSourceLocator().getSourceElement(thread.getTopStackFrame()).toString();
-			IDebugTarget[] debuggedClassPath = topStackFrame.getLaunch().getDebugTargets();
+			SourceAnalycer analycer = new SourceAnalycer(resource);
+			analycer.encoder();
 			
 		} catch (DebugException e) {
 			// TODO Auto-generated catch block

@@ -48,7 +48,8 @@ public class SampleView {
 		
 		ChartFigure flowchart = new ChartFigure();
 		lws.setContents(flowchart);
-
+//		flowchart.
+		
 		TerminatorFigure start = new TerminatorFigure();
 		start.setName("Start");
 		start.setBounds(new Rectangle(40, 20, 80, 20));
@@ -60,8 +61,6 @@ public class SampleView {
 
 		for (String statement : array) {
 			String[] part = statement.split("~");
-			System.out.println(part[0]);
-			System.out.println(part[1]);
 			
 			if (part[0].compareTo("if") == 0) {
 				DecisionFigure dec = new DecisionFigure();
@@ -225,45 +224,6 @@ public class SampleView {
 		}
         canvas.update();
 	}
-		
-		// Creacion de figuras
-//		TerminatorFigure start = new TerminatorFigure();
-//		start.setName("Start");
-//		// start.setBounds(new Rectangle(40, 20, 80, 20));
-//		DecisionFigure dec = new DecisionFigure();
-//		dec.setName("Should I?");
-//		// dec.setBounds(new Rectangle(30, 80, 100, 60));
-//		ProcessFigure proc = new ProcessFigure();
-//		proc.setName("Do it!");
-//		// proc.setBounds(new Rectangle(40, 160, 80, 40));
-//		TerminatorFigure stop = new TerminatorFigure();
-//		stop.setName("End");
-		
-		
-		
-//		stop.setBounds(new Rectangle(40, 300, 80, 20)); // Problemas con la posicion...
-		//		stop.setForegroundColor(ColorConstants.red);	// Cambio de color de figura
-		
-		// Union de figuras
-//		PathFigure path1 = new PathFigure();
-//		path1.setSourceAnchor(start.outAnchor);
-//		path1.setTargetAnchor(dec.inAnchor);
-//		PathFigure path2 = new PathFigure();
-//		path2.setSourceAnchor(dec.yesAnchor);
-//		path2.setTargetAnchor(proc.inAnchor);
-//		PathFigure path3 = new PathFigure();
-//		path3.setSourceAnchor(dec.noAnchor);
-//		path3.setTargetAnchor(stop.inAnchor);
-//		PathFigure path4 = new PathFigure();
-//		path4.setSourceAnchor(proc.outAnchor);
-//		path4.setTargetAnchor(stop.inAnchor);
-
-//		new Dnd(start);
-//		new Dnd(proc);
-//		new Dnd(dec); // PERMITE MOVIMIENTO
-//		new Dnd(stop);
-//
-//	}
 
 	static class Dnd extends MouseMotionListener.Stub implements MouseListener {
 		// PERMITE MOVIMIENTO y otras cosas
