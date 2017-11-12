@@ -29,7 +29,7 @@ public class DecisionFigure extends ActivityFigure {
 		pl.addPoint(r.x + r.width / 2, r.y + r.height - 1);
 		pl.addPoint(r.x + r.width, r.y + r.height / 2);
 		g.drawPolygon(pl);
-		g.drawText(message, r.x + r.width / 4 + 5, r.y + 3 * r.height / 8);
+		g.drawText(message, r.x + r.width / 5 , r.y + 3 * r.height / 8);
 		g.drawText("N", r.x + 7 * r.width / 8, r.y + 3 * r.height / 8);
 		g.drawText("Y", r.x + r.width / 2 - 2, r.y + 3 * r.height / 4);
 	}

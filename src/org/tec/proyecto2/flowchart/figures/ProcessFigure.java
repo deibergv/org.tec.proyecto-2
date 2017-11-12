@@ -20,7 +20,7 @@ public class ProcessFigure extends ActivityFigure {
 
 	public void paintFigure(Graphics g) {
 		Rectangle r = bounds;
-		g.drawText(message, r.x + r.width / 4, r.y + r.height / 4);
+		g.drawText(message, r.x + r.width / 6, r.y + r.height / 4);
 		g.drawRectangle(r.x, r.y, r.width - 1, r.height - 1);
 	}
 }

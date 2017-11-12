@@ -17,6 +17,7 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.AST;
 //import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.IfStatement;
@@ -71,6 +72,7 @@ public class DebugHandler extends AbstractHandler {
                 createAST(mypackage);
             }
         }
+//        System.out.println(input);
         figureGen(input.get(0));
 
     }
@@ -86,29 +88,53 @@ public class DebugHandler extends AbstractHandler {
             	List<Statement> names = method.getBody().statements();
         		ArrayList<String> temp = new ArrayList<>();
             	
-            	for (Statement statement : names) {            		
-            		if (statement.getNodeType() == 24) {
-            			ForStatement state = (ForStatement)statement;
-            			temp.add("for"+"~"+state.getExpression());
-            		} else if (statement.getNodeType() == 25) {
-            			IfStatement state = (IfStatement)statement;
-            			temp.add("if"+"~"+state.getExpression());
-            		} else if( statement.getNodeType() == 61) {
-            			WhileStatement state = (WhileStatement)statement;  
-            			temp.add("while"+"~"+state.getExpression());
-            		} else if( statement.getNodeType() == 21){
-            			ExpressionStatement state = (ExpressionStatement)statement;
-            			temp.add("exp"+"~"+state.getExpression());
-            		} else if( statement.getNodeType() == 60){
-            			VariableDeclarationStatement state = (VariableDeclarationStatement)statement;
-            			temp.add("var"+"~"+state.fragments().toString());
-//            		} else {
-//            			temp.add(statement.toString());
-            		}
+            	for (Statement statement : names) {
+            		statementVerify(statement,temp);
             	}
             	input.add(temp);
             }           
         }
+    }
+    
+    public void statementVerify (Statement statement, ArrayList<String> temp) {
+    	if (statement.getNodeType() == 24) {
+			ForStatement state = (ForStatement)statement;
+			temp.add("for~"+state.getExpression());
+			temp.add("for~start");
+			statementVerify(state.getBody(),temp);
+			temp.add("for~end");
+		} else if (statement.getNodeType() == 25) {
+			IfStatement state = (IfStatement)statement;
+			temp.add("if~"+state.getExpression());
+			temp.add("if~start");
+			statementVerify(state.getThenStatement(),temp);
+			temp.add("if~end");
+//			IfStatement elseSte = (IfStatement)state.getElseStatement();
+			temp.add("if~else");
+			statementVerify(state.getElseStatement(),temp);
+			temp.add("if~endelse");
+		} else if( statement.getNodeType() == 61) {
+			WhileStatement state = (WhileStatement)statement;  
+			temp.add("while~"+state.getExpression());
+			temp.add("while~start");
+			statementVerify(state.getBody(),temp);
+			temp.add("while~end");
+		} else if( statement.getNodeType() == 21){
+			ExpressionStatement state = (ExpressionStatement)statement;
+			temp.add("exp~"+state.getExpression());
+		} else if( statement.getNodeType() == 60){
+			VariableDeclarationStatement state = (VariableDeclarationStatement)statement;
+			temp.add("var~"+state.fragments().toString());
+		} else if( statement.getNodeType() == 8) {
+			Block state = (Block)statement;
+			List<Statement> lista = state.statements();
+			for (Statement sta:lista) {
+				statementVerify(sta,temp);
+			}
+		} else {
+			temp.add("indf~"+statement.getNodeType());
+		}
+    	
     }
 
     /**
