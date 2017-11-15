@@ -14,7 +14,6 @@ public class StepOverHandler extends AbstractHandler {
 		try {
 			thread.stepOver();
 		} catch (DebugException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;

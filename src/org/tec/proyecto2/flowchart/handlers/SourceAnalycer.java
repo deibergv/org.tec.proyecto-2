@@ -33,8 +33,10 @@ public class SourceAnalycer {
 	private static final String JDT_NATURE = "org.eclipse.jdt.core.javanature";
 	private String[] resourceList;
 	private IProject[] projects;
+	private String methodName;
 	
-	SourceAnalycer(String code) {
+	SourceAnalycer(String code,String method) {
+		this.methodName = method;
 		resourceList = code.split("/");
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
         IWorkspaceRoot root = workspace.getRoot();
@@ -73,34 +75,15 @@ public class SourceAnalycer {
 	
 	public void createAST (MethodVisitor visitor) throws JavaModelException {
 		ArrayList<String> temp = new ArrayList<>();
-//		for (MethodDeclaration method : visitor.getMethods()) {
-//			List<Statement> names = method.getBody().statements();
-//			for (Statement statement : names) {            		
-//				if (statement.getNodeType() == 24) {
-//					ForStatement state = (ForStatement)statement;
-//					temp.add("for"+"~"+state.getExpression());
-//				} else if (statement.getNodeType() == 25) {
-//					IfStatement state = (IfStatement)statement;
-//					temp.add("if"+"~"+state.getExpression());
-//				} else if( statement.getNodeType() == 61) {
-//					WhileStatement state = (WhileStatement)statement;  
-//					temp.add("while"+"~"+state.getExpression());
-//				} else if( statement.getNodeType() == 21){
-//					ExpressionStatement state = (ExpressionStatement)statement;
-//					temp.add("exp"+"~"+state.getExpression());
-//				} else if( statement.getNodeType() == 60){
-//					VariableDeclarationStatement state = (VariableDeclarationStatement)statement;
-//					temp.add("var"+"~"+state.fragments().toString());
-//				}
-//			}
-//		}
-		
 		for (MethodDeclaration method : visitor.getMethods()) {
-        	List<Statement> names = method.getBody().statements();
-        	
-        	for (Statement statement : names) {
-        		statementVerify(statement,temp);
-        	}
+//			if (method.getName().toString().contains(methodName) || method.getName().toString().compareTo(methodName) == 0) {
+				List<Statement> names = method.getBody().statements();
+
+				for (Statement statement : names) {
+					statementVerify(statement,temp);
+				}
+//			} else {
+//			}
         }  
 		
 		Display.getDefault().syncExec(new Runnable() {
@@ -123,7 +106,6 @@ public class SourceAnalycer {
 			temp.add("if~start");
 			statementVerify(state.getThenStatement(),temp);
 			temp.add("if~end");
-//			IfStatement elseSte = (IfStatement)state.getElseStatement();
 			temp.add("if~else");
 			statementVerify(state.getElseStatement(),temp);
 			temp.add("if~endelse");

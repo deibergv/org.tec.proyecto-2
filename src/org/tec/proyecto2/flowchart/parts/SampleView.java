@@ -19,11 +19,14 @@ import org.eclipse.swt.widgets.Composite;
 import org.tec.proyecto2.flowchart.figures.ActivityFigure;
 import org.tec.proyecto2.flowchart.figures.ChartFigure;
 import org.tec.proyecto2.flowchart.figures.DecisionFigure;
+import org.tec.proyecto2.flowchart.figures.ExternalFigure;
 import org.tec.proyecto2.flowchart.figures.PathFigure;
 import org.tec.proyecto2.flowchart.figures.ProcessFigure;
 import org.tec.proyecto2.flowchart.figures.TerminatorFigure;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
 
 public class SampleView {
 	
@@ -48,72 +51,158 @@ public class SampleView {
 		
 		ChartFigure flowchart = new ChartFigure();
 		lws.setContents(flowchart);
-//		flowchart.
 		
-		TerminatorFigure start = new TerminatorFigure();
-		start.setName("Start");
-		start.setBounds(new Rectangle(40, 20, 80, 20));
-		flowchart.add(start);
-		
-		ActivityFigure temp = null;
-		
-		int x = 30;
+		int x = 60;
 		int y = 110;	
 		int ytemp = 0;
 		int xtemp = 0;
 		
+		List<ActivityFigure> list = flowchart.getChildren();
+		
+		ArrayList<Integer> types = new ArrayList<>();
+		ArrayList<ArrayList<Integer>> direction = new ArrayList<>(); 
+		
+		TerminatorFigure start = new TerminatorFigure();
+		start.setName("Start");
+		start.setBounds(new Rectangle(60, 20, 80, 20));
+		flowchart.add(start);
+		
+		
+		types.add(6);
+		
+		ArrayList<Integer> ini = new ArrayList<>();
+		ini.add(1);
+		direction.add(ini);
+		
+		int counter = 1;
+		Stack<Integer> stack = new Stack<>(); 
+		
 		for (String statement : array) {
+			ArrayList<Integer> tempy = new ArrayList<>();
 			String[] part = statement.split("~");
+			
 			if (part[0].compareTo("if") == 0) {
 				if (part[1].compareTo("start") == 0) {
+					stack.push(counter - 1);
 					ytemp = y;
-				} else if (part[1].compareTo("end") == 0) {
+					
+				} else if (part[1].compareTo("end") == 0){
+					stack.push(counter - 1);
 					xtemp = y;
+					
 				} else if (part[1].compareTo("else") == 0) {
+					stack.push(counter);
 					y = ytemp;
-					x = 200;
+					x = 260;
+					
 				} else if (part[1].compareTo("endelse") == 0) {
+					int elseind = stack.pop();
+					int ifend = stack.pop();
+					int ifstart = stack.pop();
+					direction.remove(ifend);
+					tempy.add(counter);
+					direction.add(ifend,tempy);
+					direction.get(ifstart).add(elseind);
 					y = xtemp;
 					x = 30;
+					
 				} else {
-					create(part[1],y,x,temp,0,flowchart);
+					create(part[1],y,x,0,flowchart);
 					y+=110;
+					types.add(0);
+					tempy.add(counter+1);
+					direction.add(tempy);
+					counter += 1;
 				}
 			} else if (part[0].compareTo("for") == 0) {
 				if (part[1].compareTo("start") == 0) {
+					stack.push(counter - 1);
 					
 				} else if (part[1].compareTo("end") == 0) {
+					int ind = stack.pop();
+					tempy.add(ind);
+					direction.remove(counter-1);
+					direction.add(counter-1,tempy);
+					direction.get(ind).add(counter);
 					
 				} else {
-					create(part[1],y,x,temp,0,flowchart);
+					create(part[1],y,x,0,flowchart);
 					y+=110;
+					types.add(1);
+					tempy.add(counter+1);
+					direction.add(tempy);
+					counter += 1;
 				}
 				
 			} else if (part[0].compareTo("while") == 0) {
 				if (part[1].compareTo("start") == 0) {
+					stack.push(counter - 1);
 					
 				} else if (part[1].compareTo("end") == 0) {
+					int ind = stack.pop();
+					tempy.add(ind);
+					direction.remove(counter-1);
+					direction.add(counter-1,tempy);
+					direction.get(ind).add(counter);
 					
 				} else {
-					create(part[1],y,x,temp,0,flowchart);
+					create(part[1],y,x,0,flowchart);
 					y+=110;
+					types.add(2);
+					tempy.add(counter+1);
+					direction.add(tempy);
+					counter += 1;
 				}
 				
 			} else if (part[0].compareTo("var") == 0) {
-				create(part[1],y,x,temp,1,flowchart);
+				create(part[1],y,x,1,flowchart);
 				y+=110;
+				types.add(5);
+				tempy.add(counter+1);
+				direction.add(tempy);
+				counter += 1;
 				
 			} else if (part[0].compareTo("exp") == 0) {
-				create(part[1],y,x,temp,1,flowchart);
-				y+=110;
-
+				if (part[1].contains("System")) {
+					create(part[1],y,x,1,flowchart);
+					y+=110;
+					types.add(3);
+					tempy.add(counter+1);
+					direction.add(tempy);
+					counter += 1;
+					
+				} else if (part[1].contains("()")) {
+					create(part[1],y,x,2,flowchart);
+					y+=110;
+					types.add(4);
+					tempy.add(counter+1);
+					direction.add(tempy);
+					counter += 1;
+					
+				} else {
+					create(part[1],y,x,1,flowchart);
+					y+=110;
+					types.add(3);
+					tempy.add(counter+1);
+					direction.add(tempy);
+					counter += 1;
+				}
 			}
 		}
+		TerminatorFigure end = new TerminatorFigure();
+		end.setName("End");
+		end.setBounds(new Rectangle(x, y, 80, 20));
+		flowchart.add(end);
+		types.add(6);
+		ArrayList<Integer> init = new ArrayList<>();
+		direction.add(init);
+		counter +=1;
+		
+		setLinks(types,direction,flowchart);
 		canvas.update();
 	}
 	
-	private static void create(String name, int y, int x, ActivityFigure temp, int type,
-			ChartFigure flowchart) {
+	private static void create(String name, int y, int x, int type, ChartFigure flowchart) {
 		
 		if (type == 0) {
 			DecisionFigure dec = new DecisionFigure();
@@ -121,162 +210,159 @@ public class SampleView {
 			flowchart.add(dec);
 			dec.setBounds(new Rectangle(x, y, name.length()*10+40, 60));
 			new Dnd(dec);
-			//				PathFigure path1 = new PathFigure();
-			//				PathFigure path2 = new PathFigure();
-			//				if (temp == null) {
-			//					path1.setSourceAnchor(start.outAnchor);
-			//					path1.setTargetAnchor(dec.inAnchor);
-			//					temp = dec;
-			//					type = 1;
-			//				} else {
-			//					if (type == 1) {
-			//						DecisionFigure otemp = (DecisionFigure)temp;
-			//						path1.setSourceAnchor(otemp.yesAnchor);
-			//						path1.setTargetAnchor(dec.inAnchor);
-			//						temp = dec;
-			//					} else if (type == 2) {
-			//						ProcessFigure otemp = (ProcessFigure)temp;
-			//						path1.setSourceAnchor(otemp.outAnchor);
-			//						path1.setTargetAnchor(dec.inAnchor);
-			//						temp = dec;
-			//						type = 1;
-			//					}
-			//				}
-			//				flowchart.add(path1);
-
-//			DecisionFigure dec = new DecisionFigure();
-//			dec.setName("for");
-//			flowchart.add(dec);
-//			dec.setBounds(new Rectangle(x, y, 100, 60));
-//			new Dnd(dec);
-//			PathFigure path1 = new PathFigure();
-//			PathFigure path2 = new PathFigure();
-//			if (temp == null) {
-//				path1.setSourceAnchor(start.outAnchor);
-//				path1.setTargetAnchor(dec.inAnchor);
-//				path2.setSourceAnchor(dec.noAnchor);
-//				path2.setTargetAnchor(dec.inAnchor);
-//				temp = dec;
-//				type = 1;
-//			} else {
-//				if (type == 1) {
-//					DecisionFigure otemp = (DecisionFigure)temp;
-//					path1.setSourceAnchor(otemp.yesAnchor);
-//					path1.setTargetAnchor(dec.inAnchor);
-//					path2.setSourceAnchor(dec.noAnchor);
-//					path2.setTargetAnchor(dec.inAnchor);
-//					temp = dec;
-//				} else if (type == 2) {
-//					ProcessFigure otemp = (ProcessFigure)temp;
-//					path1.setSourceAnchor(otemp.outAnchor);
-//					path1.setTargetAnchor(dec.inAnchor);
-//					path2.setSourceAnchor(dec.noAnchor);
-//					path2.setTargetAnchor(dec.inAnchor);
-//					temp = dec;
-//					type = 1;
-//				}
-//			}
-//			flowchart.add(path1);
-//			flowchart.add(path2);
-
-//		} else if (part[0].compareTo("while") == 0) {
-//			DecisionFigure dec = new DecisionFigure();
-//			dec.setName("while");
-//			flowchart.add(dec);
-//			dec.setBounds(new Rectangle(30, y, 100, 60));
-//			new Dnd(dec);
-//			PathFigure path1 = new PathFigure();
-//			PathFigure path2 = new PathFigure();
-//			if (temp == null) {
-//				path1.setSourceAnchor(start.outAnchor);
-//				path1.setTargetAnchor(dec.inAnchor);
-//				path2.setSourceAnchor(dec.noAnchor);
-//				path2.setTargetAnchor(dec.inAnchor);
-//				temp = dec;
-//				type = 1;
-//			} else {
-//				if (type == 1) {
-//					DecisionFigure otemp = (DecisionFigure)temp;
-//					path1.setSourceAnchor(otemp.yesAnchor);
-//					path1.setTargetAnchor(dec.inAnchor);
-//					path2.setSourceAnchor(dec.noAnchor);
-//					path2.setTargetAnchor(dec.inAnchor);
-//					temp = dec;
-//				} else if (type == 2) {
-//					ProcessFigure otemp = (ProcessFigure)temp;
-//					path1.setSourceAnchor(otemp.outAnchor);
-//					path1.setTargetAnchor(dec.inAnchor);
-//					path2.setSourceAnchor(dec.noAnchor);
-//					path2.setTargetAnchor(dec.inAnchor);
-//					temp = dec;
-//					type = 1;
-//				}
-//			}
-//			flowchart.add(path1);
-//			flowchart.add(path2);
-//
-//		} else if (part[0].compareTo("var") == 0) {
 		} else if (type == 1) {
 			ProcessFigure dec = new ProcessFigure();
 			dec.setName(name);
-			flowchart.add(dec);
-			dec.setBounds(new Rectangle(x, y, name.length()*10, 40));
+			flowchart.add(dec); 
+			int large = name.length();
+			if (large*10 > 200) {
+				large = large*10 - large*10/4;
+			} else {
+				large = large*10;
+			}
+			dec.setBounds(new Rectangle(x, y, large, 40));
 			new Dnd(dec);
-//			PathFigure path = new PathFigure();
-//			if (temp == null) {
-//				path.setSourceAnchor(start.outAnchor);
-//				path.setTargetAnchor(dec.inAnchor);
-//				temp = dec;
-//				type = 2;
-//			} else {
-//				if (type == 1) {
-//					DecisionFigure otemp = (DecisionFigure)temp;
-//					path.setSourceAnchor(otemp.yesAnchor);
-//					path.setTargetAnchor(dec.inAnchor);
-//					temp = dec;
-//					type =2;
-//				} else if (type == 2) {
-//					ProcessFigure otemp = (ProcessFigure)temp;
-//					path.setSourceAnchor(otemp.outAnchor);
-//					path.setTargetAnchor(dec.inAnchor);
-//					temp = dec;
-//				}
-//			}
-//			flowchart.add(path);
-
-//		} else if (part[0].compareTo("exp") == 0) {
-//			ProcessFigure dec = new ProcessFigure();
-//			dec.setName("exp");
-//			flowchart.add(dec);
-//			dec.setBounds(new Rectangle(40, y, 80, 40));
-//			new Dnd(dec);
-//			PathFigure path = new PathFigure();
-//			if (temp == null) {
-//				path.setSourceAnchor(start.outAnchor);
-//				path.setTargetAnchor(dec.inAnchor);
-//				temp = dec;
-//				type = 2;
-//			} else {
-//				if (type == 1) {
-//					DecisionFigure otemp = (DecisionFigure)temp;
-//					path.setSourceAnchor(otemp.yesAnchor);
-//					path.setTargetAnchor(dec.inAnchor);
-//					temp = dec;
-//					type =2;
-//				} else if (type == 2) {
-//					ProcessFigure otemp = (ProcessFigure)temp;
-//					path.setSourceAnchor(otemp.outAnchor);
-//					path.setTargetAnchor(dec.inAnchor);
-//					temp = dec;
-//				}
-//			}
-//			flowchart.add(path);
-//
 		} else if (type == 2) {
+			ExternalFigure dec = new ExternalFigure();
+			dec.setName(name);
+			flowchart.add(dec);
+			int large = name.length();
+			if (large*10 > 200) {
+				large = large*15 - large*10/4;
+			} else {
+				large = large*15;
+			}
+			dec.setBounds(new Rectangle(x, y, large, 40));
+			new Dnd(dec);
+		}
+	}
+	
+	/*types:
+	 * if 0
+	 * for 1
+	 * while 2
+	 * exp 3
+	 * external 4
+	 * var 5
+	 * terminator 6
+	 */
+	
+	private static void setLinks(ArrayList<Integer> types, ArrayList<ArrayList<Integer>> direction, ChartFigure flowchart) {
+		
+		List<ActivityFigure> list = flowchart.getChildren();
+		
+		for (int i = 0; i < list.size() ;i++) {
+			PathFigure path1 = new PathFigure();
+			PathFigure path2 = new PathFigure();
+			
+			int type = types.get(i);
+			
+			ActivityFigure figure = list.get(i);
+			ArrayList<Integer> directions = direction.get(i);
+			
+			if (directions.get(0) > (list.size()-1) || directions.get(0) > (types.size()-1)) {
+				return;
+			}
+						
+			if (type == 0 || type == 1 || type == 2) {
+				DecisionFigure temp = (DecisionFigure) figure;
+				path1.setSourceAnchor(temp.yesAnchor);
+				int tempType = types.get(directions.get(0));
+				if (tempType == 0 || tempType == 1 || tempType == 2) {
+					DecisionFigure otemp = (DecisionFigure) list.get(directions.get(0));
+					path1.setTargetAnchor(otemp.inAnchor);
+				} else if (tempType == 3 || tempType == 5) {
+					ProcessFigure otemp = (ProcessFigure) list.get(directions.get(0));
+					path1.setTargetAnchor(otemp.inAnchor);
+				} else if (tempType == 4) {
+					ExternalFigure otemp = (ExternalFigure) list.get(directions.get(0));
+					path1.setTargetAnchor(otemp.inAnchor);
+				} else if (tempType == 6) {
+					TerminatorFigure otemp = (TerminatorFigure) list.get(directions.get(0));
+					path1.setTargetAnchor(otemp.inAnchor);
+				}
+				path2.setSourceAnchor(temp.noAnchor);
+				tempType = types.get(directions.get(1));
+				if (tempType == 0 || tempType == 1 || tempType == 2) {
+					DecisionFigure otemp = (DecisionFigure) list.get(directions.get(1));
+					path2.setTargetAnchor(otemp.inAnchor);
+				} else if (tempType == 3 || tempType == 5) {
+					ProcessFigure otemp = (ProcessFigure) list.get(directions.get(1));
+					path2.setTargetAnchor(otemp.inAnchor);
+				} else if (tempType == 4) {
+					ExternalFigure otemp = (ExternalFigure) list.get(directions.get(1));
+					path2.setTargetAnchor(otemp.inAnchor);
+				} else if (tempType == 6) {
+					TerminatorFigure otemp = (TerminatorFigure) list.get(directions.get(1));
+					path2.setTargetAnchor(otemp.inAnchor);
+				}
+				flowchart.add(path1);
+				flowchart.add(path2);
+			} else if (type == 3 || type == 5) {
+				ProcessFigure temp = (ProcessFigure) figure;
+				path1.setSourceAnchor(temp.outAnchor);
+				int tempType = types.get(directions.get(0));
+				if (tempType == 0 || tempType == 1 || tempType == 2) {
+					DecisionFigure otemp = (DecisionFigure) list.get(directions.get(0));
+					path1.setTargetAnchor(otemp.inAnchor);
+				} else if (tempType == 3 || tempType == 5) {
+					ProcessFigure otemp = (ProcessFigure) list.get(directions.get(0));
+					path1.setTargetAnchor(otemp.inAnchor);
+				} else if (tempType == 4) {
+					ExternalFigure otemp = (ExternalFigure) list.get(directions.get(0));
+					path1.setTargetAnchor(otemp.inAnchor);
+				} else if (tempType == 6) {
+					TerminatorFigure otemp = (TerminatorFigure) list.get(directions.get(0));
+					path1.setTargetAnchor(otemp.inAnchor);
+				}
+				flowchart.add(path1);
+			} else if (type == 4) {
+				ExternalFigure temp = (ExternalFigure) figure;
+				path1.setSourceAnchor(temp.outAnchor);
+				int tempType = types.get(directions.get(0));
+				if (tempType == 0 || tempType == 1 || tempType == 2) {
+					DecisionFigure otemp = (DecisionFigure) list.get(directions.get(0));
+					path1.setTargetAnchor(otemp.inAnchor);
+				} else if (tempType == 3 || tempType == 5) {
+					ProcessFigure otemp = (ProcessFigure) list.get(directions.get(0));
+					path1.setTargetAnchor(otemp.inAnchor);
+				} else if (tempType == 4) {
+					ExternalFigure otemp = (ExternalFigure) list.get(directions.get(0));
+					path1.setTargetAnchor(otemp.inAnchor);
+				} else if (tempType == 6) {
+					TerminatorFigure otemp = (TerminatorFigure) list.get(directions.get(0));
+					path1.setTargetAnchor(otemp.inAnchor);
+				}
+				flowchart.add(path1);
+			} else if (type == 6) {
+				TerminatorFigure temp = (TerminatorFigure) figure;
+				path1.setSourceAnchor(temp.outAnchor);
+				int tempType = types.get(directions.get(0));
+				if (tempType == 0 ||tempType == 1 || tempType == 2) {
+					DecisionFigure otemp = (DecisionFigure) list.get(directions.get(0));
+					path1.setTargetAnchor(otemp.inAnchor);
+				} else if (tempType == 3 || tempType == 5) {
+					ProcessFigure otemp = (ProcessFigure) list.get(directions.get(0));
+					path1.setTargetAnchor(otemp.inAnchor);
+				} else if (tempType == 4) {
+					ExternalFigure otemp = (ExternalFigure) list.get(directions.get(0));
+					path1.setTargetAnchor(otemp.inAnchor);
+				} else if (tempType == 6) {
+					TerminatorFigure otemp = (TerminatorFigure) list.get(directions.get(0));
+					path1.setTargetAnchor(otemp.inAnchor);
+				}
+				flowchart.add(path1);
+			} else {
+				return;
+			}
+			
+			
+			
+			
 			
 		}
 	}
-
+		
 	static class Dnd extends MouseMotionListener.Stub implements MouseListener {
 		// PERMITE MOVIMIENTO y otras cosas
 		public Dnd(IFigure figure) {

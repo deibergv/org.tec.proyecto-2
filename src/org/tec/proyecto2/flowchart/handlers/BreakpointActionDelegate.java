@@ -44,10 +44,11 @@ public class BreakpointActionDelegate extends ActionDelegate implements IJavaBre
 	    IStackFrame topStackFrame;
 		try {
 			topStackFrame = thread.getTopStackFrame();
-//			topStackFrame.getLaunch().getSourceLocator().getSourceElement(thread.getTopStackFr
 			int debuggedLineNumber = topStackFrame.getLineNumber();
+			String name = thread.getName();
+//			breakpoint.getMarker().getResource().
 			String resource = topStackFrame.getLaunch().getSourceLocator().getSourceElement(thread.getTopStackFrame()).toString();
-			SourceAnalycer analycer = new SourceAnalycer(resource);
+			SourceAnalycer analycer = new SourceAnalycer(resource,name);
 			analycer.encoder();
 			
 		} catch (DebugException e) {

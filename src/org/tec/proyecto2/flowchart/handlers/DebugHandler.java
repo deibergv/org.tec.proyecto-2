@@ -8,14 +8,12 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.AST;
-//import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -23,14 +21,9 @@ import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.ForStatement;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
-//import org.eclipse.jdt.core.dom.SimpleName;
-//import org.eclipse.jdt.core.dom.ChildListPropertyDescriptor;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
-//import org.eclipse.jdt.core.dom.ASTVisitor;
-//import org.eclipse.jdt.core.dom.Block;
-//import org.eclipse.jdt.internal.debug.core.model.*;
 import static org.tec.proyecto2.flowchart.parts.SampleView.figureGen;
 
 import java.util.ArrayList;
@@ -66,13 +59,11 @@ public class DebugHandler extends AbstractHandler {
 
     public void analyseMethods(IProject project) throws JavaModelException {
         IPackageFragment[] packages = JavaCore.create(project).getPackageFragments();
-        // parse(JavaCore.create(project));
         for (IPackageFragment mypackage : packages) {
             if (mypackage.getKind() == IPackageFragmentRoot.K_SOURCE) {
                 createAST(mypackage);
             }
         }
-//        System.out.println(input);
         figureGen(input.get(0));
 
     }
@@ -109,7 +100,6 @@ public class DebugHandler extends AbstractHandler {
 			temp.add("if~start");
 			statementVerify(state.getThenStatement(),temp);
 			temp.add("if~end");
-//			IfStatement elseSte = (IfStatement)state.getElseStatement();
 			temp.add("if~else");
 			statementVerify(state.getElseStatement(),temp);
 			temp.add("if~endelse");
